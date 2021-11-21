@@ -57,7 +57,7 @@ extension BottomChatView: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as! BottomChatCell
-        cell.viewModal = DialogueViewModal(dialogue: convarsations[indexPath.row], cellNumber: indexPath.row)
+        cell.viewModal = DialogueViewModel(dialogue: convarsations[indexPath.row], cellNumber: indexPath.row)
         return cell
     }
 }

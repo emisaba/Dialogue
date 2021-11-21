@@ -12,7 +12,7 @@ class ChatView: UIView {
     
     private let identifier = "identifier"
     
-    private lazy var collectionView: UICollectionView = {
+    public lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -21,11 +21,10 @@ class ChatView: UIView {
         cv.register(ChatViewCell.self, forCellWithReuseIdentifier: identifier)
         cv.backgroundColor = .systemBlue
         cv.contentInset = UIEdgeInsets(top: 30, left: 0, bottom: 15, right: 0)
-        cv.backgroundColor = .systemPink
         return cv
     }()
     
-    var conversation = Conversation(dictionary: ["":""]) {
+    public var chat: Chat? {
         didSet { collectionView.reloadData() }
     }
     
@@ -57,12 +56,15 @@ class ChatView: UIView {
 
 extension ChatView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return conversation.dialogs.count
+        return chat?.conversation.dialogs.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as! ChatViewCell
-        cell.viewModal = ChatViewModal(conversation: conversation, cellNumber: indexPath.row)
+        
+        if let chat = chat {
+            cell.viewModel = ChatViewModel(chat: chat, cellNumber: indexPath.row)
+        }
         return cell
     }
 }

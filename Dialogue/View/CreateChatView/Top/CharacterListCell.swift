@@ -5,7 +5,7 @@ class CharacterListCell: UICollectionViewCell {
     
     // MARK: - Properties
     
-    public var viewModal: DialogueViewModal? {
+    public var viewModal: DialogueViewModel? {
         didSet { configureUI() }
     }
     

@@ -1,6 +1,6 @@
 import UIKit
 
-struct RegisterViewModal {
+struct RegisterViewModel {
     let pageNumber: Int
     
     var shouldHideName: Bool {

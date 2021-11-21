@@ -8,9 +8,9 @@ class TopCellContents: UIView {
     
     // MARK: - Properties
     
-    public var viewModal: TopViewModal? {
+    public var viewModel: TopViewModel? {
         didSet {
-            guard let viewModal = viewModal else { return }
+            guard let viewModal = viewModel else { return }
             membersView = MembersView(frame: .zero, conversation: viewModal.conversation)
             configureUI()
         }
@@ -18,30 +18,44 @@ class TopCellContents: UIView {
     
     public var delegate: TopCellViewDelegate?
     
-    private let baseView: UIView = {
+    public let shadowView: UIView = {
         let view = UIView()
-        view.layer.cornerRadius = 15
-        view.layer.borderWidth = 5
-        view.layer.borderColor = UIColor.systemPink.cgColor
+        view.layer.shadowColor = UIColor.lightGray.cgColor
+        view.layer.shadowOffset = CGSize(width: 12, height: 12)
+        view.layer.shadowOpacity = 0.8
+        view.layer.shadowRadius = 8
+        view.backgroundColor = .white
         return view
     }()
     
-    private let titleLabel: UILabel = {
+    public let baseView: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = 25
+        return view
+    }()
+    
+    public let titleLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
+        label.font = .senobiMedium(size: 20)
+        label.textColor = .white
         return label
     }()
     
-    lazy var startButton: UIButton = {
+    public lazy var startButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = .systemPink
+        button.setImage(#imageLiteral(resourceName: "start"), for: .normal)
+        button.backgroundColor = .clear
+        button.contentEdgeInsets = UIEdgeInsets(top: 15, left: 20, bottom: 15, right: 15)
         button.layer.cornerRadius = 30
+        button.layer.borderWidth = 3
+        button.layer.borderColor = UIColor.white.cgColor
         button.addTarget(self, action: #selector(didTapStartButton), for: .touchUpInside)
         return button
     }()
     
-    lazy var membersView = MembersView(frame: .zero, conversation: Conversation(dictionary: [:]))
-    var didShowChatView = false
+    public lazy var membersView = MembersView(frame: .zero, conversation: Conversation(dictionary: [:]))
+    private var didShowChatView = false
     
     // MARK: - LifeCycle
     
@@ -65,7 +79,17 @@ class TopCellContents: UIView {
     // MARK: - Helpers
     
     func configureUI() {
-        guard let viewModal = viewModal else { return }
+        guard let viewModel = viewModel else { return }
+    
+        addSubview(shadowView)
+        shadowView.anchor(top: topAnchor,
+                        left: leftAnchor,
+                        bottom: bottomAnchor,
+                        right: rightAnchor,
+                        paddingTop: 15,
+                        paddingLeft: 15,
+                        paddingBottom: 22,
+                        paddingRight: 22)
         
         addSubview(baseView)
         baseView.anchor(top: topAnchor,
@@ -74,16 +98,19 @@ class TopCellContents: UIView {
                         right: rightAnchor,
                         paddingTop: 10,
                         paddingLeft: 10,
-                        paddingBottom: 10,
-                        paddingRight: 40)
+                        paddingBottom: 15,
+                        paddingRight: 15)
+        baseView.backgroundColor = viewModel.cellColor
         
         addSubview(startButton)
         startButton.anchor(right: rightAnchor,
-                           paddingRight: 10)
+                           paddingRight: 30)
         startButton.setDimensions(height: 60, width: 60)
         startButton.centerY(inView: self)
         
-        titleLabel.text = viewModal.titile
+        titleLabel.text = viewModel.titile
+        titleLabel.textColor = viewModel.titileTextColor
+        
         let stackView = UIStackView(arrangedSubviews: [titleLabel, membersView])
         stackView.axis = .vertical
         stackView.distribution = .fillEqually
@@ -94,8 +121,8 @@ class TopCellContents: UIView {
                          bottom: baseView.bottomAnchor,
                          right: startButton.leftAnchor,
                          paddingTop: 10,
-                         paddingLeft: 10,
-                         paddingBottom: 10,
-                         paddingRight: 10)
+                         paddingLeft: 20,
+                         paddingBottom: 20,
+                         paddingRight: 20)
     }
 }

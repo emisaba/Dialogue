@@ -1,6 +1,6 @@
 import UIKit
 
-struct DialogueViewModal {
+struct DialogueViewModel {
     let dialogue: Dialogue
     let cellNumber: Int
     

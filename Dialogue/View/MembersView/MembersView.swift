@@ -15,7 +15,7 @@ class MembersView: UIView {
         cv.delegate = self
         cv.dataSource = self
         cv.register(MembersViewCell.self, forCellWithReuseIdentifier: identifier)
-        cv.backgroundColor = .white
+        cv.backgroundColor = .clear
         return cv
     }()
     

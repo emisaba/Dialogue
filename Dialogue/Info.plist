@@ -64,5 +64,11 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Senobi-Gothic-Bold.ttf</string>
+		<string>Senobi-Gothic-Medium.ttf</string>
+		<string>Senobi-Gothic-Regular.ttf</string>
+	</array>
 </dict>
 </plist>

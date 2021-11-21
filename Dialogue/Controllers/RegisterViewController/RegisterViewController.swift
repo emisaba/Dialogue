@@ -153,7 +153,7 @@ extension RegisterViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as! RegisterCell
-        cell.viewModal = RegisterViewModal(pageNumber: indexPath.row)
+        cell.viewModal = RegisterViewModel(pageNumber: indexPath.row)
         cell.delegate = self
         cell.recordingView.delegate = self
         return cell

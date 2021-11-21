@@ -67,7 +67,7 @@ extension CharacterListView: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as! CharacterListCell
-        cell.viewModal = DialogueViewModal(dialogue: dialogues[indexPath.row], cellNumber: indexPath.row)
+        cell.viewModal = DialogueViewModel(dialogue: dialogues[indexPath.row], cellNumber: indexPath.row)
         return cell
     }
 }

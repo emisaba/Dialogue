@@ -5,14 +5,13 @@ class ChatViewCell: UICollectionViewCell {
     
     // MARK: - Properties
     
-    var viewModal: ChatViewModal? {
+    var viewModel: ChatViewModel? {
         didSet { configureUI() }
     }
     
     private let iconImageView: UIImageView = {
         let iv = UIImageView()
         iv.layer.cornerRadius = 16
-        iv.backgroundColor = .systemPink
         iv.clipsToBounds = true
         return iv
     }()
@@ -22,13 +21,13 @@ class ChatViewCell: UICollectionViewCell {
         tv.isScrollEnabled = false
         tv.isUserInteractionEnabled = false
         tv.backgroundColor = .clear
-        tv.font = .systemFont(ofSize: 16)
+        tv.font = .senobi(size: 20)
         return tv
     }()
     
     private let bubbleContainer: UIView = {
         let view = UIView()
-        view.backgroundColor = .systemGray
+        view.backgroundColor = .white
         view.layer.cornerRadius = 12
         return view
     }()
@@ -70,9 +69,10 @@ class ChatViewCell: UICollectionViewCell {
     // MARK: - Helpers
     
     func configureUI() {
-        guard let viewModal = viewModal else { return }
+        guard let viewModel = viewModel else { return }
         
-        textView.text = viewModal.dialogue
-        iconImageView.sd_setImage(with: viewModal.imageUrl, completed: nil)
+        textView.text = viewModel.dialogue
+        textView.textColor = viewModel.textColor
+        iconImageView.sd_setImage(with: viewModel.imageUrl, completed: nil)
     }
 }

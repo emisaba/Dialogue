@@ -11,7 +11,7 @@ class RegisterCell: UICollectionViewCell {
     
     public var delegate: RegisterCellDelegate?
     
-    public var viewModal: RegisterViewModal? {
+    public var viewModal: RegisterViewModel? {
         didSet { configureUI() }
     }
     
