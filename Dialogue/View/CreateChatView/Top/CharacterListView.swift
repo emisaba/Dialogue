@@ -24,10 +24,10 @@ class CharacterListView: UIView {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.dataSource = self
         cv.delegate = self
+        cv.backgroundColor = CellColorType.yellow.cellColor
         cv.register(CharacterListCell.self, forCellWithReuseIdentifier: identifier)
-        cv.backgroundColor = .white
-        cv.backgroundColor = .systemGray
         cv.contentInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        cv.showsHorizontalScrollIndicator = false
         return cv
     }()
     
@@ -53,8 +53,13 @@ class CharacterListView: UIView {
     // MARK: - Helpers
     
     func configureUI() {
+        backgroundColor = CellColorType.yellow.cellColor
+        
         addSubview(collectionView)
-        collectionView.fillSuperview()
+        collectionView.anchor(top: safeAreaLayoutGuide.topAnchor,
+                              left: leftAnchor,
+                              right: rightAnchor,
+                              height: 110)
     }
 }
 
@@ -99,8 +104,8 @@ extension CharacterListView: UICollectionViewDelegate {
 
 extension CharacterListView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let height = frame.height
-        return CGSize(width: height - 10, height: height)
+        let height = frame.height - Dimension.safeAreatTopHeight
+        return CGSize(width: height - 30, height: height)
     }
 }
 

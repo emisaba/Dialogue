@@ -20,7 +20,7 @@ class CustomAlert: UIView {
     
     private lazy var registerButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Register", for: .normal)
+        button.setTitle("登録", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .systemGray
         button.addTarget(self, action: #selector(didTapRegisterButton), for: .touchUpInside)
@@ -46,12 +46,12 @@ class CustomAlert: UIView {
         
         baseView.addSubview(registerButton)
         registerButton.anchor(top: textView.bottomAnchor,
-                        left: leftAnchor,
-                        right: rightAnchor,
-                        paddingTop: 10,
-                        paddingLeft: 20,
-                        paddingRight: 20,
-                        height: 50)
+                              left: leftAnchor,
+                              right: rightAnchor,
+                              paddingTop: 10,
+                              paddingLeft: 20,
+                              paddingRight: 20,
+                              height: 50)
     }
     
     required init?(coder: NSCoder) {

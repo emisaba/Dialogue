@@ -15,8 +15,8 @@ class BottomChatView: UIView {
         cv.delegate = self
         cv.dataSource = self
         cv.register(BottomChatCell.self, forCellWithReuseIdentifier: identifier)
-        cv.backgroundColor = .systemGray
         cv.isPagingEnabled = true
+        cv.backgroundColor = CellColorType.pink.cellColor
         return cv
     }()
     

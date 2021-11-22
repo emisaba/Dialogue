@@ -6,6 +6,10 @@ class CreateChatCell: UITableViewCell {
     
     public var label: UILabel = {
         let label = UILabel()
+        label.font = .senobi(size: 22)
+        label.textAlignment = .center
+        label.backgroundColor = .clear
+        label.textColor = .white
         return label
     }()
     

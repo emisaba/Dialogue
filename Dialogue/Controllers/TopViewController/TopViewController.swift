@@ -33,17 +33,18 @@ class TopViewController: UIViewController {
         super.viewDidLoad()
         
         configureUI()
-        fetchConversations()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.isNavigationBarHidden = true
+        fetchConversations()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         Dimension.safeAreatTopHeight = view.safeAreaInsets.top
+        Dimension.safeAreatBottomHeight = view.safeAreaInsets.bottom
     }
     
     // MARK: - API
@@ -68,12 +69,12 @@ class TopViewController: UIViewController {
         view.addSubview(tableView)
         tableView.fillSuperview()
         
-//        view.addSubview(moveToDialoguePageButton)
-//        moveToDialoguePageButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor,
-//                                        right: view.rightAnchor,
-//                                        paddingBottom: 10,
-//                                        paddingRight: 20)
-//        moveToDialoguePageButton.setDimensions(height: 60, width: 60)
+        view.addSubview(moveToDialoguePageButton)
+        moveToDialoguePageButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor,
+                                        right: view.rightAnchor,
+                                        paddingBottom: 10,
+                                        paddingRight: 20)
+        moveToDialoguePageButton.setDimensions(height: 60, width: 60)
     }
 }
 

@@ -6,19 +6,24 @@ class CharacterListCell: UICollectionViewCell {
     // MARK: - Properties
     
     public var viewModal: DialogueViewModel? {
-        didSet { configureUI() }
+        didSet {
+            configureUI()
+        }
     }
     
     private lazy var imageView: UIImageView = {
         let iv = UIImageView()
-        iv.layer.cornerRadius = (frame.width - 20) / 2
         iv.clipsToBounds = true
+        iv.layer.cornerRadius = 30
+        iv.contentMode = .scaleToFill
         return iv
     }()
     
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
+        label.font = .senobiMedium(size: 16)
+        label.textColor = .white
         return label
     }()
     
@@ -28,12 +33,9 @@ class CharacterListCell: UICollectionViewCell {
         super.init(frame: frame)
         
         addSubview(imageView)
-        imageView.anchor(top: topAnchor,
-                         left: leftAnchor,
-                         right: rightAnchor,
-                         paddingLeft: 10,
-                         paddingRight: 10,
-                         height: frame.width - 30)
+        imageView.anchor(top: topAnchor, paddingTop: 10)
+        imageView.setDimensions(height: 60, width: 60)
+        imageView.centerX(inView: self)
         
         addSubview(nameLabel)
         nameLabel.anchor(top: imageView.bottomAnchor,
@@ -41,6 +43,7 @@ class CharacterListCell: UICollectionViewCell {
                          bottom: bottomAnchor,
                          right: rightAnchor,
                          paddingTop: 10,
+                         paddingBottom: 10,
                          height: 20)
     }
     
@@ -53,7 +56,13 @@ class CharacterListCell: UICollectionViewCell {
     func configureUI() {
         guard let viewModal = viewModal else { return }
         
-        imageView.sd_setImage(with: viewModal.imageUrl, completed: nil)
-        nameLabel.text = viewModal.character
+        if viewModal.cellNumber == 0 {
+            imageView.image = #imageLiteral(resourceName: "user5")
+            imageView.clipsToBounds = false
+            nameLabel.text = "追加"
+        } else {
+            imageView.sd_setImage(with: viewModal.imageUrl, completed: nil)
+            nameLabel.text = viewModal.character
+        }
     }
 }

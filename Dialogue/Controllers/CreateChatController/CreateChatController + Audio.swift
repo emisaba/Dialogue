@@ -3,6 +3,23 @@ import AVFoundation
 
 extension CreateChatController: AVAudioPlayerDelegate {
     
+    // MARK: - Action
+    
+    @objc func didTapStartButton() {
+        selectedAudios = []
+        selectedAudiosUrlString = []
+        
+        conversationBottomView.convarsations.forEach { dialogue in
+            selectedAudiosUrlString.append(dialogue.audioUrl)
+            
+            guard let url = URL(string: dialogue.audioUrl) else { return }
+            selectedAudios.append(url)
+        }
+        startPlay()
+    }
+    
+    // MARK: - Helpers
+    
     func prepare(num: Int) -> Bool {
         if playNum < selectedAudios.count {
             do {
