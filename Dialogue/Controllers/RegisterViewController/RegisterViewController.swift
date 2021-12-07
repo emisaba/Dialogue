@@ -33,7 +33,7 @@ class RegisterViewController: UIViewController {
         page.currentPage = 0
         page.numberOfPages = 3
         page.pageIndicatorTintColor = .systemGray
-        page.currentPageIndicatorTintColor = .systemPink
+        page.currentPageIndicatorTintColor = CellColorType.yellow.cellColor
         return page
     }()
     
@@ -49,7 +49,8 @@ class RegisterViewController: UIViewController {
         cv.dataSource = self
         cv.register(RegisterCell.self, forCellWithReuseIdentifier: identifier)
         cv.isPagingEnabled = true
-        cv.backgroundColor = .white
+        cv.backgroundColor = CellColorType.purple.cellColor
+        cv.showsHorizontalScrollIndicator = false
         return cv
     }()
     
@@ -117,7 +118,7 @@ class RegisterViewController: UIViewController {
     // MARK: - Helpers
     
     func configureUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = CellColorType.purple.cellColor
         
         let stackView = UIStackView(arrangedSubviews: [previousButton, pageControl, nextButton])
         stackView.distribution = .fillEqually
@@ -141,6 +142,22 @@ class RegisterViewController: UIViewController {
                           paddingLeft: 10)
         backButton.setDimensions(height: 60, width: 60)
     }
+    
+    func setupNaxtPageUI(offset: CGFloat) {
+        let page = Int(offset / view.frame.width)
+        guard let imageCell = collectionView.cellForItem(at: IndexPath(item: page, section: 0)) as? RegisterCell else { return }
+        guard let recordCell = collectionView.cellForItem(at: IndexPath(item: page, section: 0)) as? RegisterCell else { return }
+        let onImageCell = page == 1
+        let onRecordCell = page == 2
+        
+        if onImageCell {
+            imageCell.nameLabel.text = self.nameText
+            
+        } else if onRecordCell {
+            recordCell.recordingView.iconImageView.image = self.selectedImage
+            recordCell.recordingView.userNameLabel.text = self.nameText
+        }
+    }
 }
 
 // MARK: - UICollectionViewDataSource
@@ -153,7 +170,7 @@ extension RegisterViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as! RegisterCell
-        cell.viewModal = RegisterViewModel(pageNumber: indexPath.row)
+        cell.viewModel = RegisterViewModel(pageNumber: indexPath.row)
         cell.delegate = self
         cell.recordingView.delegate = self
         return cell
@@ -180,6 +197,8 @@ extension RegisterViewController: UIScrollViewDelegate {
         
         let buttonTitle = pageControl.currentPage == 2 ? "register" : "next"
         nextButton.setTitle(buttonTitle, for: .normal)
+        
+        setupNaxtPageUI(offset: offset)
     }
 }
 

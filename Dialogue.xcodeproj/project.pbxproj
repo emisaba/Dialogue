@@ -39,6 +39,9 @@
 		826BB6A42733B5E10058C0CA /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826BB6A32733B5E10058C0CA /* RegisterViewModel.swift */; };
 		826BB6A82733D9FF0058C0CA /* CharacterListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826BB6A72733D9FF0058C0CA /* CharacterListView.swift */; };
 		826BB6AA2733DC590058C0CA /* CharacterListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826BB6A92733DC590058C0CA /* CharacterListCell.swift */; };
+		8290C853275E639100A2B728 /* UIButton + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8290C852275E639000A2B728 /* UIButton + Extension.swift */; };
+		8290C855275E650B00A2B728 /* UILabel + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8290C854275E650B00A2B728 /* UILabel + Extension.swift */; };
+		8290C857275E815F00A2B728 /* CAShapeLayer + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8290C856275E815D00A2B728 /* CAShapeLayer + Extension.swift */; };
 		82A8610927424CF40068689B /* CreateChatController + Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A8610827424CF40068689B /* CreateChatController + Audio.swift */; };
 		82A8610B27424E540068689B /* CreateChatController + CharacterListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A8610A27424E540068689B /* CreateChatController + CharacterListView.swift */; };
 		82AF50BF274A22BE00F484E7 /* Dimension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82AF50BE274A22BE00F484E7 /* Dimension.swift */; };
@@ -118,6 +121,9 @@
 		826BB6A32733B5E10058C0CA /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
 		826BB6A72733D9FF0058C0CA /* CharacterListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterListView.swift; sourceTree = "<group>"; };
 		826BB6A92733DC590058C0CA /* CharacterListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterListCell.swift; sourceTree = "<group>"; };
+		8290C852275E639000A2B728 /* UIButton + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton + Extension.swift"; sourceTree = "<group>"; };
+		8290C854275E650B00A2B728 /* UILabel + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel + Extension.swift"; sourceTree = "<group>"; };
+		8290C856275E815D00A2B728 /* CAShapeLayer + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CAShapeLayer + Extension.swift"; sourceTree = "<group>"; };
 		82A8610827424CF40068689B /* CreateChatController + Audio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CreateChatController + Audio.swift"; sourceTree = "<group>"; };
 		82A8610A27424E540068689B /* CreateChatController + CharacterListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CreateChatController + CharacterListView.swift"; sourceTree = "<group>"; };
 		82AF50BE274A22BE00F484E7 /* Dimension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dimension.swift; sourceTree = "<group>"; };
@@ -237,6 +243,9 @@
 				8251550B273256B400FF27E9 /* UIView + Extension.swift */,
 				825E69A427493CA90054294C /* UIFont + Extension.swift */,
 				825E69B527494F070054294C /* UIColor + Extension.swift */,
+				8290C852275E639000A2B728 /* UIButton + Extension.swift */,
+				8290C854275E650B00A2B728 /* UILabel + Extension.swift */,
+				8290C856275E815D00A2B728 /* CAShapeLayer + Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -706,10 +715,13 @@
 				8253707C2737E023009C644F /* MembersViewCell.swift in Sources */,
 				82EAFD4A2734DC4600534108 /* ChatViewCell.swift in Sources */,
 				825E69A527493CA90054294C /* UIFont + Extension.swift in Sources */,
+				8290C853275E639100A2B728 /* UIButton + Extension.swift in Sources */,
+				8290C857275E815F00A2B728 /* CAShapeLayer + Extension.swift in Sources */,
 				82EAFD4E2736335D00534108 /* BottomChatView.swift in Sources */,
 				826BB69A2733AC940058C0CA /* RegisterCell.swift in Sources */,
 				826BB6972733A66D0058C0CA /* RegisterViewController.swift in Sources */,
 				82EAFD482734D83F00534108 /* ChatView.swift in Sources */,
+				8290C855275E650B00A2B728 /* UILabel + Extension.swift in Sources */,
 				825155102732CB9C00FF27E9 /* Constants.swift in Sources */,
 				82F82C5F274A650B0048B978 /* ChatViewController + AudioPlayer.swift in Sources */,
 				826019532733E56C0060B752 /* DialogueViewModel.swift in Sources */,

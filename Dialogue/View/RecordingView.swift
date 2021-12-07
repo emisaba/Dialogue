@@ -28,34 +28,31 @@ class RecordingView: UIView, AVAudioRecorderDelegate, SFSpeechRecognizerDelegate
     
     public var numberOfRecords: Int = 0
     
-    private let dialogueFrame: UIView = {
-        let tf = UIView()
-        tf.layer.borderWidth = 3
-        tf.layer.borderColor = UIColor.systemGray.cgColor
-        return tf
+    public let iconImageView: UIImageView = {
+        let iv = UIImageView()
+        iv.layer.cornerRadius = 30
+        iv.clipsToBounds = true
+        iv.image = #imageLiteral(resourceName: "register-user")
+        return iv
     }()
+    
+    public let userNameLabel = UILabel.createLabel(size: 12, text: "なまえ")
     
     private let dialogueTextView: UITextView = {
         let tv = UITextView()
-        tv.backgroundColor = .systemRed
+        tv.backgroundColor = CellColorType.purple.chatViewMainColor
+        tv.layer.cornerRadius = 10
+        tv.font = .senobiBold(size: 14)
+        tv.textColor = .white
+        tv.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         return tv
     }()
     
-    private lazy var recordButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = .systemPink
-        button.layer.cornerRadius = 30
-        button.addTarget(self, action: #selector(didTapRecordButton), for: .touchUpInside)
-        return button
-    }()
+    private let bubbleTail = BubbleTail(frame: .zero, color: CellColorType.purple.chatViewMainColor)
     
-    private lazy var startButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = .systemBlue
-        button.layer.cornerRadius = 30
-        button.addTarget(self, action: #selector(didTapStartButton), for: .touchUpInside)
-        return button
-    }()
+    private let recordButton = UIButton.createButton(target: self, action: #selector(didTapRecordButton))
+    private let startButton = UIButton.createStartButton(target: self, action: #selector(didTapStartButton))
+    private let pulseAnimationLayer = CAShapeLayer.createPulseAnimation()
     
     private var isStart = false
     
@@ -63,12 +60,15 @@ class RecordingView: UIView, AVAudioRecorderDelegate, SFSpeechRecognizerDelegate
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        configureUI()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        configureUI()
     }
     
     // MARK: - Action
@@ -79,9 +79,12 @@ class RecordingView: UIView, AVAudioRecorderDelegate, SFSpeechRecognizerDelegate
         if isStart {
             startSpeech()
             startRecording()
+            startPulseAnimation()
+            
         } else {
             stopSpeech()
             stopRecording()
+            stopPulseAnimation()
             
             guard let text = dialogueTextView.text else { return }
             delegate?.audioInfo(audioInfo: AudioInfo(text: text, audio: getDirectory(filename: "test")))
@@ -103,31 +106,61 @@ class RecordingView: UIView, AVAudioRecorderDelegate, SFSpeechRecognizerDelegate
     // MARK: - Helper
     
     func configureUI() {
+        layer.addSublayer(pulseAnimationLayer)
+        pulseAnimationLayer.position = CGPoint(x: frame.width / 2,
+                                               y: frame.height - 30)
         
-        addSubview(dialogueFrame)
-        dialogueFrame.anchor(top: topAnchor,
-                             left: leftAnchor,
-                             right: rightAnchor,
-                             height: 280)
+        addSubview(dialogueTextView)
+        dialogueTextView.anchor(top: topAnchor,
+                                right: rightAnchor)
+        dialogueTextView.setDimensions(height: 150,
+                                       width: frame.width - 80)
         
-        dialogueFrame.addSubview(startButton)
-        startButton.anchor(bottom: dialogueFrame.bottomAnchor,
-                           right: dialogueFrame.rightAnchor,
-                           paddingBottom: 10,
-                           paddingRight: 10)
+        addSubview(bubbleTail)
+        bubbleTail.anchor(right: dialogueTextView.leftAnchor)
+        bubbleTail.setDimensions(height: 10, width: 15)
+        bubbleTail.centerY(inView: dialogueTextView)
+        
+        addSubview(startButton)
+        startButton.anchor(bottom: dialogueTextView.bottomAnchor,
+                           right: dialogueTextView.rightAnchor)
         startButton.setDimensions(height: 60, width: 60)
+        startButton.isHidden = true
         
-        dialogueFrame.addSubview(dialogueTextView)
-        dialogueTextView.anchor(top: dialogueFrame.topAnchor,
-                                left: dialogueFrame.leftAnchor,
-                                bottom: startButton.topAnchor,
-                                right: dialogueFrame.rightAnchor,
-                                paddingTop: 10, paddingLeft: 10, paddingBottom: 10, paddingRight: 10)
+        addSubview(iconImageView)
+        iconImageView.setDimensions(height: 60, width: 60)
+        iconImageView.anchor(left: leftAnchor)
+        iconImageView.centerY(inView: self)
+        
+        addSubview(userNameLabel)
+        userNameLabel.anchor(top: iconImageView.bottomAnchor,
+                             paddingTop: 10)
+        userNameLabel.centerX(inView: iconImageView)
         
         addSubview(recordButton)
-        recordButton.anchor(bottom: bottomAnchor)
-        recordButton.setDimensions(height: 60, width: 60)
+        recordButton.anchor(top: dialogueTextView.bottomAnchor,
+                            paddingTop: 50)
         recordButton.centerX(inView: self)
+        recordButton.setDimensions(height: 60, width: 60)
+    }
+    
+    func startPulseAnimation() {
+        recordButton.backgroundColor = CellColorType.pink.cellColor
+        
+        let animation = CABasicAnimation(keyPath: "transform.scale")
+        animation.toValue = 1.1
+        animation.duration = 0.8
+        animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
+        animation.autoreverses = true
+        animation.repeatCount = Float.infinity
+        
+        pulseAnimationLayer.add(animation, forKey: "pulsing")
+    }
+    
+    func stopPulseAnimation() {
+        recordButton.backgroundColor = CellColorType.pink.chatViewMainColor
+        pulseAnimationLayer.removeAllAnimations()
+        startButton.isHidden = false
     }
     
     func getDirectory(filename: String) -> URL {
@@ -182,7 +215,6 @@ class RecordingView: UIView, AVAudioRecorderDelegate, SFSpeechRecognizerDelegate
             audioRecorder?.record()
             audioRecorder?.record()
             
-            recordButton.backgroundColor = .systemYellow
         } catch {
             print("audioRecorder Error")
         }
@@ -207,11 +239,14 @@ class RecordingView: UIView, AVAudioRecorderDelegate, SFSpeechRecognizerDelegate
     func requestAuthorization() {
         SFSpeechRecognizer.requestAuthorization { authStatus in
             OperationQueue.main.addOperation {
+                
                 switch authStatus {
                     case .authorized:
                         print("authorized")
+                        
                     case .denied:
                         print("authorized")
+                        
                     case .restricted:
                         self.recordButton.isEnabled = false
                         self.recordButton.setTitle("Speech recognition restricted on this device", for: .disabled)

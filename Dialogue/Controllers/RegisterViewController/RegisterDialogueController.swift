@@ -27,7 +27,7 @@ class RegisterDialogueController: UIViewController {
         backButton.setDimensions(height: 60, width: 60)
         
         view.addSubview(recordingView)
-        recordingView.setDimensions(height: 400, width: view.frame.width - 40)
+        recordingView.setDimensions(height: 210, width: view.frame.width - 100)
         recordingView.centerX(inView: view)
         recordingView.centerY(inView: view)
     }

@@ -4,7 +4,7 @@ class BubbleTail: UIView {
     
     // MARK: - Properties
     
-    let color: UIColor
+    private let color: UIColor
     
     // MARK: - LifeCycle
     

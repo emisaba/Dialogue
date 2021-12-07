@@ -11,30 +11,39 @@ class RegisterCell: UICollectionViewCell {
     
     public var delegate: RegisterCellDelegate?
     
-    public var viewModal: RegisterViewModel? {
-        didSet { configureUI() }
+    public var viewModel: RegisterViewModel? {
+        didSet { configureViewModel() }
     }
     
-    private lazy var nameTextField: CustomTextField = {
+    private let instructionLabel = UILabel.createLabel(size: 18)
+    
+    public lazy var nameTextField: CustomTextField = {
         let tf = CustomTextField()
         tf.addTarget(self, action: #selector(didChangeText), for: .editingChanged)
+        tf.layer.cornerRadius = 25
+        tf.backgroundColor = CellColorType.purple.chatViewMainColor
         return tf
     }()
     
-    lazy var charactorImage: UIButton = {
+    public lazy var charactorImage: UIButton = {
         let button = UIButton()
-        button.layer.cornerRadius = 5
-        button.backgroundColor = .systemGray
+        button.layer.cornerRadius = 60
         button.addTarget(self, action: #selector(didTapCharactorButton), for: .touchUpInside)
+        button.setImage(#imageLiteral(resourceName: "register-user"), for: .normal)
+        button.clipsToBounds = true
         return button
     }()
     
-    var recordingView = RecordingView()
+    public let nameLabel = UILabel.createLabel(size: 14, text: "なまえ")
+    
+    public var recordingView = RecordingView()
     
     // MARK: - LifeCycle
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        addSubview(instructionLabel)
         
         addSubview(nameTextField)
         nameTextField.setDimensions(height: 50, width: frame.width - 50)
@@ -46,8 +55,13 @@ class RegisterCell: UICollectionViewCell {
         charactorImage.centerX(inView: self)
         charactorImage.centerY(inView: self)
         
+        addSubview(nameLabel)
+        nameLabel.anchor(top: charactorImage.bottomAnchor, paddingTop: 20)
+        nameLabel.setDimensions(height: 20, width: 200)
+        nameLabel.centerX(inView: charactorImage)
+        
         addSubview(recordingView)
-        recordingView.setDimensions(height: 400, width: frame.width - 40)
+        recordingView.setDimensions(height: 260, width: frame.width - 40)
         recordingView.centerY(inView: self)
         recordingView.centerX(inView: self)
     }
@@ -74,11 +88,37 @@ class RegisterCell: UICollectionViewCell {
     
     // MARK: - Helpers
     
-    func configureUI() {
-        guard let viewModal = viewModal else { return }
+    func configureViewModel() {
+        guard let viewModel = viewModel else { return }
         
-        nameTextField.isHidden = viewModal.shouldHideName
-        charactorImage.isHidden = viewModal.shouldHideImage
-        recordingView.isHidden = viewModal.shouldHideAudio
+        nameTextField.isHidden = viewModel.shouldHideName
+        charactorImage.isHidden = viewModel.shouldHideImage
+        nameLabel.isHidden = viewModel.shouldHideNameLabel
+        recordingView.isHidden = viewModel.shouldHideAudio
+        instructionLabel.text = viewModel.instructionText
+        
+        switch viewModel.pageNumber {
+        case 0:
+            instructionLabel.anchor(left: leftAnchor,
+                                    bottom: nameTextField.topAnchor,
+                                    right: rightAnchor,
+                                    paddingBottom: 20,
+                                    height: 50)
+        case 1:
+            instructionLabel.anchor(left: leftAnchor,
+                                    bottom: charactorImage.topAnchor,
+                                    right: rightAnchor,
+                                    paddingBottom: 20,
+                                    height: 50)
+        case 2:
+            instructionLabel.anchor(left: leftAnchor,
+                                    bottom: recordingView.topAnchor,
+                                    right: rightAnchor,
+                                    paddingBottom: 20,
+                                    height: 50)
+        default:
+            break
+        }
+        
     }
 }

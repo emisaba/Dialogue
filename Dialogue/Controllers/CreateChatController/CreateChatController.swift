@@ -230,13 +230,17 @@ class CreateChatController: UIViewController {
 extension CreateChatController: UITableViewDataSource  {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dialoguesBySelectedCharacter.count
+        return dialoguesBySelectedCharacter.count == 0 ? 15 : dialoguesBySelectedCharacter.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! CreateChatCell
-        cell.label.text = dialoguesBySelectedCharacter[indexPath.row].dialogue
         cell.backgroundColor = .clear
+        
+        if dialoguesBySelectedCharacter.count > 0 {
+            cell.label.text = dialoguesBySelectedCharacter[indexPath.row].dialogue
+        }
+        
         return cell
     }
 }
