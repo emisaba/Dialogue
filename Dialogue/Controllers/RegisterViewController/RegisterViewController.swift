@@ -4,36 +4,16 @@ class RegisterViewController: UIViewController {
     
     // MARK: - Properties
     
-    private lazy var backButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = .systemYellow
-        button.layer.cornerRadius = 30
-        button.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
-        return button
-    }()
-    
-    private lazy var previousButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("prev", for: .normal)
-        button.setTitleColor(.systemGray, for: .normal)
-        button.addTarget(self, action: #selector(didTapPrevButton), for: .touchUpInside)
-        return button
-    }()
-    
-    private lazy var nextButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("next", for: .normal)
-        button.setTitleColor(.systemGray, for: .normal)
-        button.addTarget(self, action: #selector(didTapNextButton), for: .touchUpInside)
-        return button
-    }()
+    private let backButton = UIButton.createButton(target: self, action: #selector(didTapBackButton))
+    private let previousButton = UIButton.createTextButton(target: self, action: #selector(didTapPrevButton), title: "prev")
+    private let nextButton = UIButton.createTextButton(target: self, action: #selector(didTapPrevButton), title: "next")
     
     private var pageControl: UIPageControl = {
         let page = UIPageControl()
         page.currentPage = 0
         page.numberOfPages = 3
-        page.pageIndicatorTintColor = .systemGray
-        page.currentPageIndicatorTintColor = CellColorType.yellow.cellColor
+        page.pageIndicatorTintColor = .white.withAlphaComponent(0.9)
+        page.currentPageIndicatorTintColor = CellColorType.pink.cellColor
         return page
     }()
     
@@ -49,7 +29,7 @@ class RegisterViewController: UIViewController {
         cv.dataSource = self
         cv.register(RegisterCell.self, forCellWithReuseIdentifier: identifier)
         cv.isPagingEnabled = true
-        cv.backgroundColor = CellColorType.purple.cellColor
+        cv.backgroundColor = CellColorType.yellow.cellColor
         cv.showsHorizontalScrollIndicator = false
         return cv
     }()
@@ -118,7 +98,7 @@ class RegisterViewController: UIViewController {
     // MARK: - Helpers
     
     func configureUI() {
-        view.backgroundColor = CellColorType.purple.cellColor
+        view.backgroundColor = CellColorType.yellow.cellColor
         
         let stackView = UIStackView(arrangedSubviews: [previousButton, pageControl, nextButton])
         stackView.distribution = .fillEqually

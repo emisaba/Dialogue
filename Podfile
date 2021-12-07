@@ -10,6 +10,7 @@ target 'Dialogue' do
   pod 'Firebase/Firestore'
   pod 'Firebase/Storage'
   pod 'SDWebImage'
+  pod 'Hero'
 
   target 'DialogueTests' do
     inherit! :search_paths

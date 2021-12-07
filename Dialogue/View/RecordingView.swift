@@ -1,10 +1,16 @@
 import UIKit
 import AVFoundation
 import Speech
+import SDWebImage
 
 struct AudioInfo {
     let text: String
     let audio: URL
+}
+
+struct CharacterInfo {
+    let imageUrl: URL
+    let name: String
 }
 
 protocol RecordingViewDelegate {
@@ -28,19 +34,23 @@ class RecordingView: UIView, AVAudioRecorderDelegate, SFSpeechRecognizerDelegate
     
     public var numberOfRecords: Int = 0
     
-    public let iconImageView: UIImageView = {
+    public lazy var iconImageView: UIImageView = {
         let iv = UIImageView()
         iv.layer.cornerRadius = 30
         iv.clipsToBounds = true
-        iv.image = #imageLiteral(resourceName: "register-user")
+        
+        if let imageUrl = characterInfo?.imageUrl {
+            iv.sd_setImage(with: imageUrl, completed: nil)
+        }
+        
         return iv
     }()
     
-    public let userNameLabel = UILabel.createLabel(size: 12, text: "なまえ")
+    public lazy var userNameLabel = UILabel.createLabel(size: 12, text: characterInfo?.name)
     
-    private let dialogueTextView: UITextView = {
+    private lazy var dialogueTextView: UITextView = {
         let tv = UITextView()
-        tv.backgroundColor = CellColorType.purple.chatViewMainColor
+        tv.backgroundColor = color.chatViewMainColor
         tv.layer.cornerRadius = 10
         tv.font = .senobiBold(size: 14)
         tv.textColor = .white
@@ -48,7 +58,7 @@ class RecordingView: UIView, AVAudioRecorderDelegate, SFSpeechRecognizerDelegate
         return tv
     }()
     
-    private let bubbleTail = BubbleTail(frame: .zero, color: CellColorType.purple.chatViewMainColor)
+    private lazy var bubbleTail = BubbleTail(frame: .zero, color: color.chatViewMainColor)
     
     private let recordButton = UIButton.createButton(target: self, action: #selector(didTapRecordButton))
     private let startButton = UIButton.createStartButton(target: self, action: #selector(didTapStartButton))
@@ -56,9 +66,15 @@ class RecordingView: UIView, AVAudioRecorderDelegate, SFSpeechRecognizerDelegate
     
     private var isStart = false
     
+    private var color: CellColorType
+    private var characterInfo: CharacterInfo?
+    
     // MARK: - LifeCycle
     
-    override init(frame: CGRect) {
+    init(frame: CGRect, color: CellColorType, characterInfo: CharacterInfo? = nil) {
+        if let characterInfo = characterInfo { self.characterInfo = characterInfo }
+        self.color = color
+        
         super.init(frame: frame)
     }
     
@@ -130,7 +146,7 @@ class RecordingView: UIView, AVAudioRecorderDelegate, SFSpeechRecognizerDelegate
         addSubview(iconImageView)
         iconImageView.setDimensions(height: 60, width: 60)
         iconImageView.anchor(left: leftAnchor)
-        iconImageView.centerY(inView: self)
+        iconImageView.centerY(inView: dialogueTextView)
         
         addSubview(userNameLabel)
         userNameLabel.anchor(top: iconImageView.bottomAnchor,

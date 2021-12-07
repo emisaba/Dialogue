@@ -7,28 +7,8 @@ class CreateChatController: UIViewController {
     
     private let identifier = "identifier"
     private let headerIdentifier = "headerIdentifier"
-    
-    private lazy var backButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("< トップ", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = .senobiBold(size: 18)
-        button.backgroundColor = .clear
-        button.layer.cornerRadius = 30
-        button.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
-        return button
-    }()
-    
-    private lazy var registerButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("登録", for: .normal)
-        button.setTitleColor(CellColorType.blue.cellColor, for: .normal)
-        button.titleLabel?.font = .senobiMedium(size: 18)
-        button.backgroundColor = .white
-        button.layer.cornerRadius = 30
-        button.addTarget(self, action: #selector(didTapRegisterButton), for: .touchUpInside)
-        return button
-    }()
+    public let backButton = UIButton.createTextButton(target: self, action: #selector(didTapBackButton), title: "↓")
+    private let registerButton = UIButton.createTextButton(target: self, action: #selector(didTapRegisterButton), title: "登録")
     
     public lazy var characterListView: CharacterListView = {
         let view = CharacterListView()
@@ -36,7 +16,7 @@ class CreateChatController: UIViewController {
         return view
     }()
     
-    public lazy var tableView: UITableView = {
+    public lazy var dialogueListView: UITableView = {
         let tableView = UITableView()
         tableView.register(CreateChatCell.self, forCellReuseIdentifier: identifier)
         tableView.rowHeight = 50
@@ -48,32 +28,7 @@ class CreateChatController: UIViewController {
         return tableView
     }()
     
-    public var dialoguesBySelectedCharacter: [Dialogue] = []
-    
-    private lazy var addDialogueButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = .clear
-        button.contentEdgeInsets = UIEdgeInsets(top: 10, left: 7, bottom: 10, right: 10)
-        button.layer.cornerRadius = 30
-        button.setImage(#imageLiteral(resourceName: "add-comment"), for: .normal)
-        button.addTarget(self, action: #selector(didTapAddDialogueButton), for: .touchUpInside)
-        return button
-    }()
-    
-    public let conversationBottomView = BottomChatView()
-    private lazy var startButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = .clear
-        button.setImage(#imageLiteral(resourceName: "start"), for: .normal)
-        button.layer.borderWidth = 2
-        button.layer.borderColor = UIColor.white.cgColor
-        button.imageEdgeInsets = UIEdgeInsets(top: 18, left: 18, bottom: 18, right: 18)
-        button.layer.cornerRadius = 25
-        button.addTarget(self, action: #selector(didTapStartButton), for: .touchUpInside)
-        return button
-    }()
-    
-    private let customTextField: CustomTextField = {
+    private let titleTextField: CustomTextField = {
         let tf = CustomTextField()
         tf.backgroundColor = CellColorType.blue.chatViewMainColor
         tf.layer.cornerRadius = 30
@@ -81,8 +36,41 @@ class CreateChatController: UIViewController {
         tf.layer.borderWidth = 0
         tf.placeholder = "タイトルを入力してください"
         tf.font = .senobi(size: 18)
+        tf.isHidden = true
         return tf
     }()
+    
+    private let dialogueListDescription = UILabel.createLabel(size: 18, color: .orange, text: "1. キャラを選択すると\nセリフが表示されます")
+    private let bottomChatDescription = UILabel.createLabel(size: 18, color: .pink, text: "2. セリフを選択すると\n会話が表示されます")
+    private let registerDescription = UILabel.createLabel(size: 18, color: .blue, text: "3. 会話が完成したらタイトルを入力し\n登録してください")
+    
+    private let addDialogueButton = UIButton.createImageButton(target: self,
+                                                               action: #selector(didTapAddDialogueButton),
+                                                               image: #imageLiteral(resourceName: "add-comment"),
+                                                               isFrame: false,
+                                                               inset: UIEdgeInsets(top: 10, left: 7, bottom: 10, right: 10))
+    
+    private let startButton = UIButton.createImageButton(target: self,
+                                                         action: #selector(didTapStartButton),
+                                                         image: #imageLiteral(resourceName: "start"),
+                                                         isFrame: true,
+                                                         inset: UIEdgeInsets(top: 18, left: 18, bottom: 18, right: 18))
+    
+    public var dialoguesBySelectedCharacter: [Dialogue] = [] {
+        didSet {
+            dialogueListDescription.isHidden = true
+            addDialogueButton.isHidden = false
+        }
+    }
+    
+    public lazy var conversationBottomView: BottomChatView = {
+        let view = BottomChatView()
+        view.delegate = self
+        return view
+    }()
+    
+    
+    public var selectedCharacter: Dialogue?
     
     public var audioPlayer: AVAudioPlayer?
     public var selectedAudios: [URL] = []
@@ -97,8 +85,9 @@ class CreateChatController: UIViewController {
         detectKeyboard()
     }
     
-    override var prefersStatusBarHidden: Bool {
-        return true
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = true
     }
     
     // MARK: - API
@@ -128,11 +117,15 @@ class CreateChatController: UIViewController {
     // MARK: - Actions
     
     @objc func didTapBackButton() {
-        navigationController?.popViewController(animated: true)
+        dismiss(animated: true, completion: nil)
     }
     
     @objc func didTapAddDialogueButton() {
-        let vc = RegisterDialogueController()
+        guard let imageUrl = URL(string: selectedCharacter?.imageUrl ?? "") else { return }
+        guard let name = selectedCharacter?.character else { return }
+        let characterInfo = CharacterInfo(imageUrl: imageUrl, name: name)
+        
+        let vc = RegisterDialogueController(characterInfo: characterInfo)
         navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -148,7 +141,7 @@ class CreateChatController: UIViewController {
     
     @objc func didTapRegisterButton() {
         
-        guard let title = customTextField.text else { return }
+        guard let title = titleTextField.text else { return }
         let members = conversationBottomView.convarsations.map { $0.imageUrl }
         let dialogues = conversationBottomView.convarsations.map { $0.dialogue }
         
@@ -169,47 +162,66 @@ class CreateChatController: UIViewController {
         
         view.addSubview(backButton)
         backButton.anchor(top: view.topAnchor,
-                          left: view.leftAnchor,
-                          paddingLeft: 0)
+                          right: view.rightAnchor)
         backButton.setDimensions(height: 60, width: 100)
         
+        registerButton.isHidden = true
         view.addSubview(registerButton)
         registerButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor,
                               right: view.safeAreaLayoutGuide.rightAnchor,
+                              paddingBottom: 15,
                               paddingRight: 20)
         registerButton.setDimensions(height: 60, width: 60)
         
-        view.addSubview(customTextField)
-        customTextField.anchor(left: view.leftAnchor,
-                               bottom: view.safeAreaLayoutGuide.bottomAnchor,
-                               right: registerButton.leftAnchor,
-                               paddingLeft: 20, paddingRight: 20)
-        customTextField.setDimensions(height: 60, width: 250)
+        view.addSubview(titleTextField)
+        titleTextField.anchor(left: view.leftAnchor,
+                              right: registerButton.leftAnchor,
+                              paddingLeft: 20,
+                              paddingRight: 20)
+        titleTextField.setDimensions(height: 60, width: 250)
+        titleTextField.centerY(inView: registerButton)
+        
+        view.addSubview(registerDescription)
+        registerDescription.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor,
+                                   paddingBottom: 18)
+        registerDescription.centerX(inView: view)
         
         view.addSubview(conversationBottomView)
         conversationBottomView.anchor(left: view.leftAnchor,
                                       bottom: registerButton.topAnchor,
                                       right: view.rightAnchor,
-                                      paddingBottom: 70,
-                                      height: 120)
+                                      paddingBottom: 75,
+                                      height: 130)
         conversationBottomView.backgroundColor = .clear
         
-        view.addSubview(tableView)
-        tableView.anchor(top: characterListView.bottomAnchor,
-                         left: view.leftAnchor,
-                         bottom: conversationBottomView.topAnchor,
-                         right: view.rightAnchor,
-                         paddingBottom: 50)
+        conversationBottomView.addSubview(bottomChatDescription)
+        bottomChatDescription.anchor(top: conversationBottomView.topAnchor,
+                                     paddingTop: 50)
+        bottomChatDescription.centerX(inView: view)
         
+        view.addSubview(dialogueListView)
+        dialogueListView.anchor(top: characterListView.bottomAnchor,
+                                left: view.leftAnchor,
+                                bottom: conversationBottomView.topAnchor,
+                                right: view.rightAnchor,
+                                paddingBottom: 50)
+        
+        dialogueListView.addSubview(dialogueListDescription)
+        dialogueListDescription.centerX(inView: dialogueListView)
+        dialogueListDescription.anchor(top: dialogueListView.topAnchor,
+                                       paddingTop: 110)
+        
+        createTriangle()
+        
+        addDialogueButton.isHidden = true
         view.addSubview(addDialogueButton)
-        addDialogueButton.anchor(top: tableView.topAnchor,
-                                 right: tableView.rightAnchor,
+        addDialogueButton.anchor(top: dialogueListView.topAnchor,
+                                 right: dialogueListView.rightAnchor,
                                  paddingTop: 15,
                                  paddingRight: 10)
         addDialogueButton.setDimensions(height: 60, width: 60)
         
-        createTriangle()
-        
+        startButton.isHidden = true
         view.addSubview(startButton)
         startButton.anchor(bottom: conversationBottomView.topAnchor,
                            right: view.rightAnchor,
@@ -230,17 +242,13 @@ class CreateChatController: UIViewController {
 extension CreateChatController: UITableViewDataSource  {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dialoguesBySelectedCharacter.count == 0 ? 15 : dialoguesBySelectedCharacter.count
+        return dialoguesBySelectedCharacter.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! CreateChatCell
         cell.backgroundColor = .clear
-        
-        if dialoguesBySelectedCharacter.count > 0 {
-            cell.label.text = dialoguesBySelectedCharacter[indexPath.row].dialogue
-        }
-        
+        cell.label.text = dialoguesBySelectedCharacter[indexPath.row].dialogue
         return cell
     }
 }
@@ -250,5 +258,18 @@ extension CreateChatController: UITableViewDataSource  {
 extension CreateChatController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         conversationBottomView.convarsations.append(dialoguesBySelectedCharacter[indexPath.row])
+        
+        bottomChatDescription.isHidden = true
+        startButton.isHidden = false
+    }
+}
+
+// MARK: - BottomChatViewDelegate
+
+extension CreateChatController: BottomChatViewDelegate {
+    func moreThanTwoConversations() {
+        registerDescription.isHidden = true
+        registerButton.isHidden = false
+        titleTextField.isHidden = false
     }
 }

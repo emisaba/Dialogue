@@ -1,4 +1,5 @@
 import UIKit
+import Hero
 
 class TopViewController: UIViewController {
     
@@ -16,9 +17,11 @@ class TopViewController: UIViewController {
         return tv
     }()
     
-    private lazy var moveToDialoguePageButton: UIButton = {
+    private let buttonBackgroundView = UIView()
+    
+    private lazy var moveToCreateChatViewButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = .systemYellow
+        button.backgroundColor = CellColorType.blue.cellColor
         button.layer.cornerRadius = 30
         button.addTarget(self, action: #selector(didTapCreateButton), for: .touchUpInside)
         return button
@@ -32,13 +35,13 @@ class TopViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        fetchConversations()
         configureUI()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.isNavigationBarHidden = true
-        fetchConversations()
     }
     
     override func viewDidLayoutSubviews() {
@@ -59,8 +62,18 @@ class TopViewController: UIViewController {
     // MARK: - Actions
     
     @objc func didTapCreateButton() {
+        buttonBackgroundView.hero.id = "moveToCreateChatView"
+        moveToCreateChatViewButton.hero.id = "moveToCreateChatViewButton"
+        
         let vc = CreateChatController()
-        navigationController?.pushViewController(vc, animated: true)
+        vc.view.hero.id = "moveToCreateChatView"
+        vc.backButton.hero.id = "moveToCreateChatViewButton"
+        
+        let nav = UINavigationController(rootViewController: vc)
+        nav.modalPresentationStyle = .fullScreen
+        nav.isHeroEnabled = true
+        
+        present(nav, animated: true, completion: nil)
     }
     
     // MARK: - Helpers
@@ -69,12 +82,20 @@ class TopViewController: UIViewController {
         view.addSubview(tableView)
         tableView.fillSuperview()
         
-        view.addSubview(moveToDialoguePageButton)
-        moveToDialoguePageButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor,
-                                        right: view.rightAnchor,
-                                        paddingBottom: 10,
-                                        paddingRight: 20)
-        moveToDialoguePageButton.setDimensions(height: 60, width: 60)
+        view.addSubview(buttonBackgroundView)
+        buttonBackgroundView.anchor(bottom: view.bottomAnchor,
+                                    right: view.rightAnchor,
+                                    paddingBottom: -60,
+                                    paddingRight: -60)
+        buttonBackgroundView.setDimensions(height: 180, width: 180)
+        buttonBackgroundView.layer.cornerRadius = 90
+        buttonBackgroundView.backgroundColor = CellColorType.yellow.cellColor
+        
+        buttonBackgroundView.addSubview(moveToCreateChatViewButton)
+        moveToCreateChatViewButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor,
+                                          right: view.rightAnchor,
+                                          paddingRight: 20)
+        moveToCreateChatViewButton.setDimensions(height: 60, width: 60)
     }
 }
 
@@ -105,14 +126,17 @@ extension TopViewController: TopCellViewDelegate {
     func didTapStartButton(cell: TopCellContents) {
         
         guard let viewModel = cell.viewModel else { return }
-        guard let cell = tableView.cellForRow(at: IndexPath(row: viewModel.cellNumber, section: 0)) else { return }
-        let cellFrame = cell.frame
+        guard let cell = tableView.cellForRow(at: IndexPath(row: viewModel.cellNumber, section: 0)) as? TopCell else { return }
+        cell.topCellView.baseView.hero.id = "openChatView"
         
         let vc = ChatViewController(conversation: conversations[viewModel.cellNumber],
-                                    cellFrame: cellFrame,
                                     colors: ChatViewColors(topColor: viewModel.cellColor,
-                                                           mainColor: viewModel.chatViewColor))
+                                                           mainColor: viewModel.chatViewColor),
+                                    selectedCell: cell.topCellView)
+        vc.topView.hero.id = "openChatView"
+        vc.isHeroEnabled = true
+        vc.modalPresentationStyle = .fullScreen
         
-        navigationController?.pushViewController(vc, animated: false)
+        present(vc, animated: true, completion: nil)
     }
 }

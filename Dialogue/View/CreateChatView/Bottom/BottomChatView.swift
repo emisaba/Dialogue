@@ -1,12 +1,18 @@
 import UIKit
 
+protocol BottomChatViewDelegate {
+    func moreThanTwoConversations()
+}
+
 class BottomChatView: UIView {
     
     // MARK: - Properties
     
+    public var delegate: BottomChatViewDelegate?
+    
     private var identifier = "identifier"
     
-    private lazy var collectionView: UICollectionView = {
+    public lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 0
         layout.scrollDirection = .horizontal
@@ -17,6 +23,7 @@ class BottomChatView: UIView {
         cv.register(BottomChatCell.self, forCellWithReuseIdentifier: identifier)
         cv.isPagingEnabled = true
         cv.backgroundColor = CellColorType.pink.cellColor
+        cv.showsHorizontalScrollIndicator = true
         return cv
     }()
     
@@ -25,6 +32,8 @@ class BottomChatView: UIView {
             collectionView.reloadData()
             collectionView.scrollToItem(at: IndexPath(item: convarsations.count - 1, section: 0),
                                         at: .centeredHorizontally, animated: true)
+            
+            if convarsations.count >= 2 { delegate?.moreThanTwoConversations() }
         }
     }
     

@@ -21,7 +21,7 @@ class RegisterCell: UICollectionViewCell {
         let tf = CustomTextField()
         tf.addTarget(self, action: #selector(didChangeText), for: .editingChanged)
         tf.layer.cornerRadius = 25
-        tf.backgroundColor = CellColorType.purple.chatViewMainColor
+        tf.backgroundColor = CellColorType.yellow.chatViewMainColor
         return tf
     }()
     
@@ -35,8 +35,7 @@ class RegisterCell: UICollectionViewCell {
     }()
     
     public let nameLabel = UILabel.createLabel(size: 14, text: "なまえ")
-    
-    public var recordingView = RecordingView()
+    public var recordingView = RecordingView(frame: .zero, color: .yellow, characterInfo: nil)
     
     // MARK: - LifeCycle
     

@@ -32,9 +32,7 @@ class ChatViewController: UIViewController {
     }()
     
     private let chatView = ChatView()
-    
-    private let titleFrame: CGRect
-    private let topSafeAreaHeight: CGFloat
+    public let selectedCell: TopCellContents?
     
     public var audio: AVAudioPlayer?
     public var audioUrls: [URL]
@@ -42,9 +40,8 @@ class ChatViewController: UIViewController {
     
     // MARK: - LifeCycel
     
-    init(conversation: Conversation, cellFrame: CGRect, colors: ChatViewColors) {
-        titleFrame = cellFrame
-        topSafeAreaHeight = Dimension.safeAreatTopHeight
+    init(conversation: Conversation, colors: ChatViewColors, selectedCell: TopCellContents) {
+        self.selectedCell = selectedCell
         audioUrls = conversation.audioUrls.map { URL(string: $0)! }
         
         chatView.collectionView.backgroundColor = colors.mainColor
@@ -53,19 +50,20 @@ class ChatViewController: UIViewController {
         
         super.init(nibName: nil, bundle: nil)
         
-        configureUI()
         view.backgroundColor = colors.topColor
-        
-        handleChatView(isShow: true)
         
         titleLabel.text = conversation.title
         topView.viewModel = TopViewModel(conversation: conversation,
                                          cellNumber: 0,
                                          colorType: nil)
         
-        if prepareAudio(num: playNum) {
-            audio?.play()
-        }
+        if prepareAudio(num: playNum) { audio?.play() }
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        configureUI()
     }
     
     required init?(coder: NSCoder) {
@@ -79,57 +77,39 @@ class ChatViewController: UIViewController {
     // MARK: - Actions
     
     @objc func didTapCloseButton() {
-        handleChatView(isShow: false)
+        dismiss(animated: true) {
+            self.selectedCell?.baseView.hero.id = ""
+        }
     }
     
     // MARK: - Helpers
     
     func configureUI() {
         
-        view.addSubview(titleLabel)
-        titleLabel.frame = CGRect(x: titleFrame.origin.x + 20,
-                                  y: titleFrame.origin.y,
-                                  width: view.frame.width - titleFrame.origin.x - 70,
-                                  height: 50)
-        
         view.addSubview(topView)
-        topView.frame = CGRect(x: titleFrame.origin.x,
-                                 y: titleFrame.origin.y,
-                                 width: titleFrame.width,
-                                 height: titleFrame.height)
+        topView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+                       left: view.leftAnchor,
+                       right: view.rightAnchor,
+                       height: 170)
+        
+        topView.addSubview(titleLabel)
+        titleLabel.anchor(top: topView.topAnchor,
+                          left: topView.leftAnchor,
+                          right: topView.rightAnchor,
+                          paddingLeft: 20,
+                          height: 50)
         
         view.addSubview(chatView)
-        chatView.frame = CGRect(x: 0,
-                                y: topView.frame.origin.y + titleFrame.height,
-                                width: view.frame.width,
-                                height: view.frame.height - topSafeAreaHeight - topView.frame.height)
+        chatView.anchor(top: topView.bottomAnchor,
+                        left: view.leftAnchor,
+                        bottom: view.bottomAnchor,
+                        right: view.rightAnchor)
         
         view.addSubview(closebutton)
-        closebutton.frame = CGRect(x: view.frame.width - 70,
-                                   y: topSafeAreaHeight - 20,
-                                   width: 60,
-                                   height: 60)
-    }
-    
-    func handleChatView(isShow: Bool) {
-        
-        UIView.animate(withDuration: 0.25) {
-            if isShow {
-                self.titleLabel.frame.origin.y = self.topSafeAreaHeight + 18
-                self.topView.frame.origin.y = self.topSafeAreaHeight + 20
-                self.chatView.frame.origin.y = self.topView.frame.origin.y + self.titleFrame.height
-                self.closebutton.isHidden =  false
-            } else {
-                self.titleLabel.frame.origin.y = self.titleFrame.origin.y
-                self.topView.frame.origin.y = self.titleFrame.origin.y
-                self.chatView.frame.origin.y = self.view.frame.height
-                self.closebutton.isHidden = true
-            }
-            
-        } completion: { _ in
-            if !isShow {
-                self.navigationController?.popViewController(animated: false)
-            }
-        }
+        closebutton.anchor(top: view.topAnchor,
+                           right: topView.rightAnchor,
+                           paddingTop: 20,
+                           paddingRight: 20)
+        closebutton.setDimensions(height: 60, width: 60)
     }
 }

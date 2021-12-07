@@ -3,7 +3,7 @@ import UIKit
 class TopCell: UITableViewCell {
     
     // MARK: - Properties
-    lazy var topCellView = TopCellContents()
+    public lazy var topCellView = TopCellContents()
     
     // MARK: - LifeCycle
     

@@ -38,6 +38,7 @@ extension CreateChatController: AVAudioPlayerDelegate {
     func startPlay() {
         if prepare(num: playNum) {
             audioPlayer?.play()
+            scrollCollectionView(num: playNum)
         }
     }
     
@@ -46,6 +47,12 @@ extension CreateChatController: AVAudioPlayerDelegate {
         
         if prepare(num: playNum) {
             audioPlayer?.play()
+            scrollCollectionView(num: playNum)
         }
+    }
+    
+    func scrollCollectionView(num: Int) {
+        let indexPath = IndexPath(item: num, section: 0)
+        conversationBottomView.collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
     }
 }

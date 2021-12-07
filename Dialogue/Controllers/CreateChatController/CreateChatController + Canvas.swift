@@ -38,8 +38,8 @@ extension CreateChatController {
         let safeareaBottomHeight = Dimension.safeAreatBottomHeight
         
         let characterListHeight: CGFloat = 110
-        let registerAreaHeight: CGFloat = 80
-        let bottomChatHeight: CGFloat = 120
+        let registerAreaHeight: CGFloat = 100
+        let bottomChatHeight: CGFloat = 130
         let triangleHeight: CGFloat = 50
         
         let charaacterListTriangleY: CGFloat = safeAreaTopHeight + characterListHeight

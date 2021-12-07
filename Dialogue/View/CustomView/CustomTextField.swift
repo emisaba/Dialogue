@@ -13,7 +13,7 @@ class CustomTextField: UITextField {
         
         let attributes: [NSAttributedString.Key: Any] = [.foregroundColor: UIColor.lightGray,
                                                          .font: UIFont.senobi(size: 14)]
-        attributedPlaceholder = NSAttributedString(string: "名前を入力してください", attributes: attributes)
+        attributedPlaceholder = NSAttributedString(string: "", attributes: attributes)
     }
     
     required init?(coder: NSCoder) {

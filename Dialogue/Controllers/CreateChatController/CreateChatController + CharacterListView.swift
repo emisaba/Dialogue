@@ -4,7 +4,8 @@ extension CreateChatController: CharacterListViewDelegate {
     
     func selectCharacter(dialogues: [Dialogue]) {
         dialoguesBySelectedCharacter = dialogues
-        tableView.reloadData()
+        selectedCharacter = dialogues[0]
+        dialogueListView.reloadData()
     }
     
     func showRegisterViewController() {

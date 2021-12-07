@@ -14,6 +14,7 @@ class BottomChatCell: UICollectionViewCell {
         iv.layer.cornerRadius = 30
         iv.backgroundColor = .systemGreen
         iv.clipsToBounds = true
+        iv.image = #imageLiteral(resourceName: "character")
         return iv
     }()
     

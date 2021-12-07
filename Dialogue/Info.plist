@@ -70,5 +70,9 @@
 		<string>Senobi-Gothic-Medium.ttf</string>
 		<string>Senobi-Gothic-Regular.ttf</string>
 	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
+	<key>UIStatusBarHidden</key>
+	<true/>
 </dict>
 </plist>
