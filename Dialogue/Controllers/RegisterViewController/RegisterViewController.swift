@@ -4,16 +4,23 @@ class RegisterViewController: UIViewController {
     
     // MARK: - Properties
     
-    private let backButton = UIButton.createButton(target: self, action: #selector(didTapBackButton))
-    private let previousButton = UIButton.createTextButton(target: self, action: #selector(didTapPrevButton), title: "prev")
-    private let nextButton = UIButton.createTextButton(target: self, action: #selector(didTapPrevButton), title: "next")
+    private lazy var backButton: UIButton = {
+        let button = UIButton()
+        button.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
+        button.setImage(#imageLiteral(resourceName: "left-arrow"), for: .normal)
+        button.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        return button
+    }()
+    
+    private lazy var previousButton = UIButton.createTextButton(target: self, action: #selector(didTapPrevButton), title: "prev")
+    private lazy var nextButton = UIButton.createTextButton(target: self, action: #selector(didTapPrevButton), title: "next")
     
     private var pageControl: UIPageControl = {
         let page = UIPageControl()
         page.currentPage = 0
         page.numberOfPages = 3
         page.pageIndicatorTintColor = .white.withAlphaComponent(0.9)
-        page.currentPageIndicatorTintColor = CellColorType.pink.cellColor
+        page.currentPageIndicatorTintColor = CellColorType.yellow.cellColor
         return page
     }()
     
@@ -29,7 +36,7 @@ class RegisterViewController: UIViewController {
         cv.dataSource = self
         cv.register(RegisterCell.self, forCellWithReuseIdentifier: identifier)
         cv.isPagingEnabled = true
-        cv.backgroundColor = CellColorType.yellow.cellColor
+        cv.backgroundColor = CellColorType.purple.cellColor
         cv.showsHorizontalScrollIndicator = false
         return cv
     }()
@@ -91,14 +98,13 @@ class RegisterViewController: UIViewController {
             collectionView.isPagingEnabled = true
             
             let buttonTitle = pageControl.currentPage == 2 ? "register" : "next"
-            nextButton.setTitle(buttonTitle, for: .normal)
-        }
+            nextButton.setTitle(buttonTitle, for: .normal)        }
     }
     
     // MARK: - Helpers
     
     func configureUI() {
-        view.backgroundColor = CellColorType.yellow.cellColor
+        view.backgroundColor = CellColorType.purple.cellColor
         
         let stackView = UIStackView(arrangedSubviews: [previousButton, pageControl, nextButton])
         stackView.distribution = .fillEqually
@@ -107,8 +113,10 @@ class RegisterViewController: UIViewController {
         stackView.anchor(left: view.leftAnchor,
                          bottom: view.safeAreaLayoutGuide.bottomAnchor,
                          right: view.rightAnchor,
+                         paddingLeft: 10,
                          paddingBottom: 10,
-                         height: 50)
+                         paddingRight: 10,
+                         height: 60)
         
         view.addSubview(collectionView)
         collectionView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
@@ -177,6 +185,7 @@ extension RegisterViewController: UIScrollViewDelegate {
         
         let buttonTitle = pageControl.currentPage == 2 ? "register" : "next"
         nextButton.setTitle(buttonTitle, for: .normal)
+        nextButton.backgroundColor = pageControl.currentPage == 2 ? CellColorType.yellow.chatViewMainColor : .clear
         
         setupNaxtPageUI(offset: offset)
     }

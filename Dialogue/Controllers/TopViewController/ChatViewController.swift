@@ -7,9 +7,8 @@ class ChatViewController: UIViewController {
     
     private lazy var closebutton: UIButton = {
         let button = UIButton()
-        button.setImage(#imageLiteral(resourceName: "cancel"), for: .normal)
-        button.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        button.layer.cornerRadius = 30
+        button.setImage(#imageLiteral(resourceName: "down-arrow"), for: .normal)
+        button.contentEdgeInsets = UIEdgeInsets(top: 15, left: 15, bottom: 15, right: 15)
         button.addTarget(self, action: #selector(didTapCloseButton), for: .touchUpInside)
         return button
     }()

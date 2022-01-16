@@ -32,6 +32,8 @@ class ChatViewCell: UICollectionViewCell {
         return view
     }()
     
+    private let bubbleTail = BubbleTail(frame: .zero, color: .white)
+    
     // MARK: - LifeCycle
     
     override init(frame: CGRect) {
@@ -48,7 +50,7 @@ class ChatViewCell: UICollectionViewCell {
         bubbleContainer.anchor(top: topAnchor,
                                left: iconImageView.rightAnchor,
                                bottom: bottomAnchor,
-                               paddingLeft: 12)
+                               paddingLeft: 14)
         bubbleContainer.widthAnchor.constraint(lessThanOrEqualToConstant: frame.width - 10 - 32).isActive = true
         
         bubbleContainer.addSubview(textView)
@@ -64,6 +66,13 @@ class ChatViewCell: UICollectionViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        addSubview(bubbleTail)
+        bubbleTail.frame = CGRect(x: 45, y: frame.height - 22, width: 18, height: 10)
     }
     
     // MARK: - Helpers

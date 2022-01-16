@@ -47,7 +47,7 @@ extension CreateChatController {
         let tableViewTriangleY: CGFloat = bottomChatTriangleY - bottomChatHeight - triangleHeight
         
         let charaacterListTriangle = TriangleView(frame: .zero,
-                                                triangleColor: CellColorType.yellow.cellColor,
+                                                triangleColor: CellColorType.pink.cellColor,
                                                 backGroundColor: .clear)
         view.addSubview(charaacterListTriangle)
         charaacterListTriangle.frame = CGRect(x: 0,
@@ -56,8 +56,8 @@ extension CreateChatController {
                                               height: triangleHeight)
         
         let bottomChatTriangle = TriangleView(frame: .zero,
-                                            triangleColor: CellColorType.pink.cellColor,
-                                            backGroundColor: CellColorType.blue.cellColor)
+                                              triangleColor: CellColorType.green.cellColor,
+                                              backGroundColor: CellColorType.blue.cellColor)
         view.addSubview(bottomChatTriangle)
         bottomChatTriangle.frame = CGRect(x: 0,
                                           y: bottomChatTriangleY,
@@ -65,8 +65,8 @@ extension CreateChatController {
                                           height: triangleHeight)
         
         let tableViewTriangle = TriangleView(frame: .zero,
-                                           triangleColor: CellColorType.orange.cellColor,
-                                           backGroundColor: CellColorType.pink.cellColor)
+                                           triangleColor: CellColorType.yellow.cellColor,
+                                           backGroundColor: CellColorType.green.cellColor)
         view.addSubview(tableViewTriangle)
         tableViewTriangle.frame = CGRect(x: 0,
                                          y: tableViewTriangleY,

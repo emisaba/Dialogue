@@ -97,7 +97,7 @@ class TopCellContents: UIView {
                         bottom: bottomAnchor,
                         right: rightAnchor,
                         paddingTop: 10,
-                        paddingLeft: 10,
+                        paddingLeft: 15,
                         paddingBottom: 15,
                         paddingRight: 15)
         baseView.backgroundColor = viewModel.cellColor

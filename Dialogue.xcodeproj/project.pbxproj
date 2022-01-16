@@ -214,7 +214,7 @@
 				82AF50BE274A22BE00F484E7 /* Dimension.swift */,
 				825E69B7274951F10054294C /* ColorType */,
 				825E69A327493C8B0054294C /* Extension */,
-				825E69A227493C480054294C /* フォント */,
+				825E69A227493C480054294C /* Fonts */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -229,12 +229,12 @@
 			path = API;
 			sourceTree = "<group>";
 		};
-		825E69A227493C480054294C /* フォント */ = {
+		825E69A227493C480054294C /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
 				825E69AA2749422B0054294C /* senobi */,
 			);
-			path = "フォント";
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 		825E69A327493C8B0054294C /* Extension */ = {

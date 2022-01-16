@@ -6,9 +6,15 @@ extension UILabel {
         let label = UILabel()
         label.textAlignment = .center
         label.font = .senobiBold(size: size)
-        label.textColor = color == nil ? .white : color?.chatViewMainColor
         label.text = text
         label.numberOfLines = 0
+        
+        if color == .yellow {
+            label.textColor = .customColor(red: 190, green: 128, blue: 24)
+        } else {
+            label.textColor = color == nil ? .white : color?.chatViewMainColor
+        }
+        
         return label
     }
 }

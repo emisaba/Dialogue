@@ -20,7 +20,7 @@ class BottomChatCell: UICollectionViewCell {
     
     private let dialogueLabel: UILabel = {
         let label = UILabel()
-        label.backgroundColor = CellColorType.pink.chatViewMainColor
+        label.backgroundColor = CellColorType.green.chatViewMainColor
         label.font = .senobi(size: 18)
         label.textColor = .white
         label.textAlignment = .center
@@ -29,7 +29,7 @@ class BottomChatCell: UICollectionViewCell {
         return label
     }()
     
-    private let bubbleTail = BubbleTail(frame: .zero, color: CellColorType.pink.chatViewMainColor)
+    private let bubbleTail = BubbleTail(frame: .zero, color: CellColorType.green.chatViewMainColor)
     
     // MARK: - LifeCycle
     

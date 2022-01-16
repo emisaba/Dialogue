@@ -7,7 +7,14 @@ class CreateChatController: UIViewController {
     
     private let identifier = "identifier"
     private let headerIdentifier = "headerIdentifier"
-    public let backButton = UIButton.createTextButton(target: self, action: #selector(didTapBackButton), title: "↓")
+    
+    public let backButton: UIButton = {
+        let button = UIButton()
+        button.setImage(#imageLiteral(resourceName: "down-arrow"), for: .normal)
+        button.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        button.addTarget(self, action: #selector(didTapCloseButton), for: .touchUpInside)
+        return button
+    }()
     private let registerButton = UIButton.createTextButton(target: self, action: #selector(didTapRegisterButton), title: "登録")
     
     public lazy var characterListView: CharacterListView = {
@@ -22,7 +29,7 @@ class CreateChatController: UIViewController {
         tableView.rowHeight = 50
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.backgroundColor = CellColorType.orange.cellColor
+        tableView.backgroundColor = CellColorType.yellow.cellColor
         tableView.separatorStyle = .none
         tableView.contentInset = UIEdgeInsets(top: 60, left: 0, bottom: 50, right: 0)
         return tableView
@@ -34,27 +41,42 @@ class CreateChatController: UIViewController {
         tf.layer.cornerRadius = 30
         tf.textColor = .white
         tf.layer.borderWidth = 0
-        tf.placeholder = "タイトルを入力してください"
         tf.font = .senobi(size: 18)
         tf.isHidden = true
+        
+        let attributes: [NSAttributedString.Key: Any] = [.foregroundColor: CellColorType.blue.cellColor]
+        tf.attributedPlaceholder = NSAttributedString(string: "タイトルを入力してください", attributes: attributes)
+        
         return tf
     }()
     
-    private let dialogueListDescription = UILabel.createLabel(size: 18, color: .orange, text: "1. キャラを選択すると\nセリフが表示されます")
-    private let bottomChatDescription = UILabel.createLabel(size: 18, color: .pink, text: "2. セリフを選択すると\n会話が表示されます")
-    private let registerDescription = UILabel.createLabel(size: 18, color: .blue, text: "3. 会話が完成したらタイトルを入力し\n登録してください")
+    private let addDialogueButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .clear
+        button.setImage(#imageLiteral(resourceName: "add-comment"), for: .normal)
+        button.layer.borderWidth = 0
+        button.layer.borderColor = UIColor.clear.cgColor
+        button.layer.cornerRadius = 0
+        button.imageEdgeInsets = UIEdgeInsets(top: 10, left: 7, bottom: 10, right: 10)
+        button.addTarget(self, action: #selector(didTapAddDialogueButton), for: .touchUpInside)
+        return button
+    }()
     
-    private let addDialogueButton = UIButton.createImageButton(target: self,
-                                                               action: #selector(didTapAddDialogueButton),
-                                                               image: #imageLiteral(resourceName: "add-comment"),
-                                                               isFrame: false,
-                                                               inset: UIEdgeInsets(top: 10, left: 7, bottom: 10, right: 10))
+    private let startButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .clear
+        button.setImage(#imageLiteral(resourceName: "start"), for: .normal)
+        button.layer.borderWidth = 2
+        button.layer.borderColor = UIColor.white.cgColor
+        button.layer.cornerRadius = 25
+        button.imageEdgeInsets = UIEdgeInsets(top: 18, left: 18, bottom: 18, right: 18)
+        button.addTarget(self, action: #selector(didTapStartButton), for: .touchUpInside)
+        return button
+    }()
     
-    private let startButton = UIButton.createImageButton(target: self,
-                                                         action: #selector(didTapStartButton),
-                                                         image: #imageLiteral(resourceName: "start"),
-                                                         isFrame: true,
-                                                         inset: UIEdgeInsets(top: 18, left: 18, bottom: 18, right: 18))
+    private let dialogueListDescription = UILabel.createLabel(size: 20, color: .yellow, text: "セリフが表示されます")
+    private let bottomChatDescription = UILabel.createLabel(size: 20, color: .green, text: "会話が表示されます")
+    private let registerDescription = UILabel.createLabel(size: 20, color: .blue, text: "タイトル入力欄が表示されます")
     
     public var dialoguesBySelectedCharacter: [Dialogue] = [] {
         didSet {
@@ -116,7 +138,7 @@ class CreateChatController: UIViewController {
     
     // MARK: - Actions
     
-    @objc func didTapBackButton() {
+    @objc func didTapCloseButton() {
         dismiss(animated: true, completion: nil)
     }
     
@@ -162,8 +184,8 @@ class CreateChatController: UIViewController {
         
         view.addSubview(backButton)
         backButton.anchor(top: view.topAnchor,
-                          right: view.rightAnchor)
-        backButton.setDimensions(height: 60, width: 100)
+                          right: view.rightAnchor, paddingRight: 10)
+        backButton.setDimensions(height: 60, width: 60)
         
         registerButton.isHidden = true
         view.addSubview(registerButton)
@@ -196,7 +218,7 @@ class CreateChatController: UIViewController {
         
         conversationBottomView.addSubview(bottomChatDescription)
         bottomChatDescription.anchor(top: conversationBottomView.topAnchor,
-                                     paddingTop: 50)
+                                     paddingTop: 60)
         bottomChatDescription.centerX(inView: view)
         
         view.addSubview(dialogueListView)

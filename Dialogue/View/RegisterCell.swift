@@ -21,7 +21,7 @@ class RegisterCell: UICollectionViewCell {
         let tf = CustomTextField()
         tf.addTarget(self, action: #selector(didChangeText), for: .editingChanged)
         tf.layer.cornerRadius = 25
-        tf.backgroundColor = CellColorType.yellow.chatViewMainColor
+        tf.backgroundColor = CellColorType.purple.chatViewMainColor
         return tf
     }()
     
@@ -29,13 +29,13 @@ class RegisterCell: UICollectionViewCell {
         let button = UIButton()
         button.layer.cornerRadius = 60
         button.addTarget(self, action: #selector(didTapCharactorButton), for: .touchUpInside)
-        button.setImage(#imageLiteral(resourceName: "register-user"), for: .normal)
+        button.setImage(#imageLiteral(resourceName: "register-user-old"), for: .normal)
         button.clipsToBounds = true
         return button
     }()
     
     public let nameLabel = UILabel.createLabel(size: 14, text: "なまえ")
-    public var recordingView = RecordingView(frame: .zero, color: .yellow, characterInfo: nil)
+    public var recordingView = RecordingView(frame: .zero, color: .purple, characterInfo: nil)
     
     // MARK: - LifeCycle
     

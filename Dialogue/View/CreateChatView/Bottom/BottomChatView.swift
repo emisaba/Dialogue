@@ -22,7 +22,7 @@ class BottomChatView: UIView {
         cv.dataSource = self
         cv.register(BottomChatCell.self, forCellWithReuseIdentifier: identifier)
         cv.isPagingEnabled = true
-        cv.backgroundColor = CellColorType.pink.cellColor
+        cv.backgroundColor = CellColorType.green.cellColor
         cv.showsHorizontalScrollIndicator = true
         return cv
     }()

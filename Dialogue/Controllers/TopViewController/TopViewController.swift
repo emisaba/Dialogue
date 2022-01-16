@@ -21,9 +21,10 @@ class TopViewController: UIViewController {
     
     private lazy var moveToCreateChatViewButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = CellColorType.blue.cellColor
         button.layer.cornerRadius = 30
         button.addTarget(self, action: #selector(didTapCreateButton), for: .touchUpInside)
+        button.setImage(#imageLiteral(resourceName: "comments"), for: .normal)
+        button.contentEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         return button
     }()
     
@@ -89,7 +90,7 @@ class TopViewController: UIViewController {
                                     paddingRight: -60)
         buttonBackgroundView.setDimensions(height: 180, width: 180)
         buttonBackgroundView.layer.cornerRadius = 90
-        buttonBackgroundView.backgroundColor = CellColorType.yellow.cellColor
+        buttonBackgroundView.backgroundColor = CellColorType.purple.cellColor
         
         buttonBackgroundView.addSubview(moveToCreateChatViewButton)
         moveToCreateChatViewButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor,

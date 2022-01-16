@@ -15,7 +15,7 @@ class CharacterListCell: UICollectionViewCell {
         let iv = UIImageView()
         iv.clipsToBounds = true
         iv.layer.cornerRadius = 30
-        iv.contentMode = .scaleToFill
+        iv.contentMode = .scaleAspectFit
         return iv
     }()
     
@@ -57,7 +57,7 @@ class CharacterListCell: UICollectionViewCell {
         guard let viewModal = viewModal else { return }
         
         if viewModal.cellNumber == 0 {
-            imageView.image = #imageLiteral(resourceName: "user5")
+            imageView.image = #imageLiteral(resourceName: "user5-1")
             imageView.clipsToBounds = false
             nameLabel.text = "追加"
         } else {

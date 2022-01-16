@@ -24,7 +24,7 @@ class CharacterListView: UIView {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.dataSource = self
         cv.delegate = self
-        cv.backgroundColor = CellColorType.yellow.cellColor
+        cv.backgroundColor = CellColorType.pink.cellColor
         cv.register(CharacterListCell.self, forCellWithReuseIdentifier: identifier)
         cv.contentInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         cv.showsHorizontalScrollIndicator = false
@@ -53,7 +53,7 @@ class CharacterListView: UIView {
     // MARK: - Helpers
     
     func configureUI() {
-        backgroundColor = CellColorType.yellow.cellColor
+        backgroundColor = CellColorType.pink.cellColor
         
         addSubview(collectionView)
         collectionView.anchor(top: safeAreaLayoutGuide.topAnchor,

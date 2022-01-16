@@ -55,6 +55,7 @@ class RecordingView: UIView, AVAudioRecorderDelegate, SFSpeechRecognizerDelegate
         tv.font = .senobiBold(size: 14)
         tv.textColor = .white
         tv.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        tv.tintColor = .lightGray
         return tv
     }()
     

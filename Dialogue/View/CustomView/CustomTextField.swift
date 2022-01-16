@@ -10,10 +10,13 @@ class CustomTextField: UITextField {
         leftViewMode = .always
         layer.cornerRadius = 5
         textColor = .white
+        font = .senobi(size: 18)
+        tintColor = .lightGray
         
         let attributes: [NSAttributedString.Key: Any] = [.foregroundColor: UIColor.lightGray,
                                                          .font: UIFont.senobi(size: 14)]
         attributedPlaceholder = NSAttributedString(string: "", attributes: attributes)
+        
     }
     
     required init?(coder: NSCoder) {
