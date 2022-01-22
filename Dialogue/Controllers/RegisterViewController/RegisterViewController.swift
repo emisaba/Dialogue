@@ -13,7 +13,7 @@ class RegisterViewController: UIViewController {
     }()
     
     private lazy var previousButton = UIButton.createTextButton(target: self, action: #selector(didTapPrevButton), title: "prev")
-    private lazy var nextButton = UIButton.createTextButton(target: self, action: #selector(didTapPrevButton), title: "next")
+    private lazy var nextButton = UIButton.createTextButton(target: self, action: #selector(didTapNextButton), title: "next")
     
     private var pageControl: UIPageControl = {
         let page = UIPageControl()
@@ -46,6 +46,8 @@ class RegisterViewController: UIViewController {
     private var audioText: String = ""
     private var audioUrl: URL = URL(fileURLWithPath: "")
     
+    public var completion: ((NewInfo) -> Void)?
+    
     // MARK: - LifeCycle
     
     override func viewDidLoad() {
@@ -57,14 +59,13 @@ class RegisterViewController: UIViewController {
     // MARK: - API
     
     func uploadDialogue() {
+        showLoader(true)
         
-        let dialogueItem = DialogueItem(image: selectedImage, audio: audioUrl, text: audioText, character: nameText)
-        DialogueService.uploadDialogue(dialogue: dialogueItem) { error in
-            if let error = error {
-                print(error.localizedDescription)
-                return
-            }
-            self.navigationController?.popViewController(animated: true)
+        let dialogueItem = CharacterItem(image: selectedImage, audio: audioUrl, text: audioText, name: nameText)
+        CharacterService.uploadCharacter(character: dialogueItem) { newInfo in
+            self.completion?(newInfo)
+            self.showLoader(false)
+            self.navigationController?.popToRootViewController(animated: true)
         }
     }
     
@@ -98,7 +99,9 @@ class RegisterViewController: UIViewController {
             collectionView.isPagingEnabled = true
             
             let buttonTitle = pageControl.currentPage == 2 ? "register" : "next"
-            nextButton.setTitle(buttonTitle, for: .normal)        }
+            nextButton.setTitle(buttonTitle, for: .normal)
+            nextButton.setTitleColor(CellColorType.purple.cellColor, for: .normal)
+        }
     }
     
     // MARK: - Helpers

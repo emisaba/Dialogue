@@ -12,16 +12,37 @@ class RegisterDialogueController: UIViewController {
         return button
     }()
     
+    private lazy var registerButton: UIButton = {
+        let button = UIButton()
+        button.addTarget(self, action: #selector(didTapRegisterButton), for: .touchUpInside)
+        button.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        button.layer.cornerRadius = 10
+        button.backgroundColor = CellColorType.yellow.cellColor
+        
+        let attributes: [NSAttributedString.Key: Any] = [.font: UIFont.senobi(size: 22), .foregroundColor: UIColor.white]
+        let attributeText = NSAttributedString(string: "register", attributes: attributes)
+        button.setAttributedTitle(attributeText, for: .normal)
+        return button
+    }()
+    
     private let instructionLabel = UILabel.createLabel(size: 18)
     
+    private var audioText: String = ""
+    private var audioUrl: URL = URL(fileURLWithPath: "")
+    
     private var recordingView: RecordingView?
+    private let characterInfo: CharacterInfo?
+    
+    public var completion: (([Dialogue]) -> Void)?
     
     // MARK: - LifeCycle
     
     init(characterInfo: CharacterInfo) {
-        recordingView = RecordingView(frame: .zero, color: .purple, characterInfo: characterInfo)
+        self.recordingView = RecordingView(frame: .zero, color: .purple, characterInfo: characterInfo)
+        self.characterInfo = characterInfo
         
         super.init(nibName: nil, bundle: nil)
+        self.recordingView?.delegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -34,10 +55,32 @@ class RegisterDialogueController: UIViewController {
         configureUI()
     }
     
+    // MARK: - API
+    
+    func uploadDialogue() {
+        showLoader(true)
+        
+        guard let id = characterInfo?.id else { return }
+        guard let imageUrl = characterInfo?.imageUrl.absoluteString else { return }
+        guard let characterName = characterInfo?.name else { return }
+        
+        let dialogueItem = DialogueItem(id: id, imageUrl: imageUrl, audio: audioUrl, text: audioText, character: characterName)
+        
+        DialogueService.uploadDialogue(dialogue: dialogueItem) { dialogues in
+            self.completion?(dialogues)
+            self.showLoader(false)
+            self.navigationController?.popToRootViewController(animated: true)
+        }
+    }
+    
     // MARK: - Actions
     
     @objc func didTapBackButton() {
         navigationController?.popViewController(animated: true)
+    }
+    
+    @objc func didTapRegisterButton() {
+        uploadDialogue()
     }
     
     // MARK: - Helper
@@ -61,5 +104,21 @@ class RegisterDialogueController: UIViewController {
         instructionLabel.text = "音声を録音してください"
         instructionLabel.anchor(bottom: recordingView.topAnchor, paddingBottom: 50)
         instructionLabel.centerX(inView: view)
+        
+        view.addSubview(registerButton)
+        registerButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor,
+                              paddingBottom: 30)
+        registerButton.setDimensions(height: 60, width: 150)
+        registerButton.centerX(inView: view)
+    }
+}
+
+// MARK: - RecordingViewDelegate
+
+extension RegisterDialogueController: RecordingViewDelegate {
+    
+    func audioInfo(audioInfo: AudioInfo) {
+        audioText = audioInfo.text
+        audioUrl = audioInfo.audio
     }
 }

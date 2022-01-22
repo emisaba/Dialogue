@@ -9,6 +9,7 @@ struct AudioInfo {
 }
 
 struct CharacterInfo {
+    let id: String
     let imageUrl: URL
     let name: String
 }

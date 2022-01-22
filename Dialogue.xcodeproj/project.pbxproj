@@ -28,7 +28,7 @@
 		825E69B627494F080054294C /* UIColor + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 825E69B527494F070054294C /* UIColor + Extension.swift */; };
 		825E69B92749520E0054294C /* ColorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 825E69B82749520E0054294C /* ColorType.swift */; };
 		826019512733E1D20060B752 /* CreateChatController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826019502733E1D20060B752 /* CreateChatController.swift */; };
-		826019532733E56C0060B752 /* DialogueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826019522733E56C0060B752 /* DialogueViewModel.swift */; };
+		826019532733E56C0060B752 /* CharacterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826019522733E56C0060B752 /* CharacterViewModel.swift */; };
 		826BB68D2732CF420058C0CA /* dataUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826BB68C2732CF420058C0CA /* dataUploader.swift */; };
 		826BB68F2732D37A0058C0CA /* DialogueService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826BB68E2732D37A0058C0CA /* DialogueService.swift */; };
 		826BB6922732D88B0058C0CA /* Dialogue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826BB6912732D88B0058C0CA /* Dialogue.swift */; };
@@ -39,6 +39,10 @@
 		826BB6A42733B5E10058C0CA /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826BB6A32733B5E10058C0CA /* RegisterViewModel.swift */; };
 		826BB6A82733D9FF0058C0CA /* CharacterListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826BB6A72733D9FF0058C0CA /* CharacterListView.swift */; };
 		826BB6AA2733DC590058C0CA /* CharacterListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826BB6A92733DC590058C0CA /* CharacterListCell.swift */; };
+		8287400C279BCC7400024290 /* CharacterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8287400B279BCC7300024290 /* CharacterService.swift */; };
+		8287400E279C1D3600024290 /* UIViewController + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8287400D279C1D3600024290 /* UIViewController + Extension.swift */; };
+		82874010279C225700024290 /* Character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8287400F279C225600024290 /* Character.swift */; };
+		82874012279C22A200024290 /* DialogueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82874011279C22A200024290 /* DialogueViewModel.swift */; };
 		8290C853275E639100A2B728 /* UIButton + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8290C852275E639000A2B728 /* UIButton + Extension.swift */; };
 		8290C855275E650B00A2B728 /* UILabel + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8290C854275E650B00A2B728 /* UILabel + Extension.swift */; };
 		8290C857275E815F00A2B728 /* CAShapeLayer + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8290C856275E815D00A2B728 /* CAShapeLayer + Extension.swift */; };
@@ -110,7 +114,7 @@
 		825E69B527494F070054294C /* UIColor + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor + Extension.swift"; sourceTree = "<group>"; };
 		825E69B82749520E0054294C /* ColorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorType.swift; sourceTree = "<group>"; };
 		826019502733E1D20060B752 /* CreateChatController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateChatController.swift; sourceTree = "<group>"; };
-		826019522733E56C0060B752 /* DialogueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogueViewModel.swift; sourceTree = "<group>"; };
+		826019522733E56C0060B752 /* CharacterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterViewModel.swift; sourceTree = "<group>"; };
 		826BB68C2732CF420058C0CA /* dataUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dataUploader.swift; sourceTree = "<group>"; };
 		826BB68E2732D37A0058C0CA /* DialogueService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogueService.swift; sourceTree = "<group>"; };
 		826BB6912732D88B0058C0CA /* Dialogue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dialogue.swift; sourceTree = "<group>"; };
@@ -121,6 +125,10 @@
 		826BB6A32733B5E10058C0CA /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
 		826BB6A72733D9FF0058C0CA /* CharacterListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterListView.swift; sourceTree = "<group>"; };
 		826BB6A92733DC590058C0CA /* CharacterListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterListCell.swift; sourceTree = "<group>"; };
+		8287400B279BCC7300024290 /* CharacterService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterService.swift; sourceTree = "<group>"; };
+		8287400D279C1D3600024290 /* UIViewController + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController + Extension.swift"; sourceTree = "<group>"; };
+		8287400F279C225600024290 /* Character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Character.swift; sourceTree = "<group>"; };
+		82874011279C22A200024290 /* DialogueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogueViewModel.swift; sourceTree = "<group>"; };
 		8290C852275E639000A2B728 /* UIButton + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton + Extension.swift"; sourceTree = "<group>"; };
 		8290C854275E650B00A2B728 /* UILabel + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel + Extension.swift"; sourceTree = "<group>"; };
 		8290C856275E815D00A2B728 /* CAShapeLayer + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CAShapeLayer + Extension.swift"; sourceTree = "<group>"; };
@@ -211,6 +219,7 @@
 		8251550D2732C5C700FF27E9 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				8251550F2732CB9C00FF27E9 /* Constants.swift */,
 				82AF50BE274A22BE00F484E7 /* Dimension.swift */,
 				825E69B7274951F10054294C /* ColorType */,
 				825E69A327493C8B0054294C /* Extension */,
@@ -224,6 +233,7 @@
 			children = (
 				826BB68C2732CF420058C0CA /* dataUploader.swift */,
 				826BB68E2732D37A0058C0CA /* DialogueService.swift */,
+				8287400B279BCC7300024290 /* CharacterService.swift */,
 				8253706F2736D611009C644F /* ChatService.swift */,
 			);
 			path = API;
@@ -245,6 +255,7 @@
 				825E69B527494F070054294C /* UIColor + Extension.swift */,
 				8290C852275E639000A2B728 /* UIButton + Extension.swift */,
 				8290C854275E650B00A2B728 /* UILabel + Extension.swift */,
+				8287400D279C1D3600024290 /* UIViewController + Extension.swift */,
 				8290C856275E815D00A2B728 /* CAShapeLayer + Extension.swift */,
 			);
 			path = Extension;
@@ -272,6 +283,7 @@
 			isa = PBXGroup;
 			children = (
 				826BB6912732D88B0058C0CA /* Dialogue.swift */,
+				8287400F279C225600024290 /* Character.swift */,
 				825370712736D9EB009C644F /* Conversation.swift */,
 				82AF50C0274A352700F484E7 /* Chat.swift */,
 				82F82C5B274A5F9F0048B978 /* ChatViewColors.swift */,
@@ -309,7 +321,8 @@
 			children = (
 				825370772737D8BD009C644F /* TopViewModel.swift */,
 				825370812738EC4E009C644F /* ChatViewModel.swift */,
-				826019522733E56C0060B752 /* DialogueViewModel.swift */,
+				826019522733E56C0060B752 /* CharacterViewModel.swift */,
+				82874011279C22A200024290 /* DialogueViewModel.swift */,
 				826BB6A32733B5E10058C0CA /* RegisterViewModel.swift */,
 			);
 			path = ViewModal;
@@ -440,7 +453,6 @@
 				826BB6932732DA8D0058C0CA /* Controllers */,
 				8251550E2732C5D300FF27E9 /* API */,
 				8251550D2732C5C700FF27E9 /* Utils */,
-				8251550F2732CB9C00FF27E9 /* Constants.swift */,
 				82FC58FF27323ABF008C680F /* AppDelegate.swift */,
 				82FC590127323ABF008C680F /* SceneDelegate.swift */,
 				82FC590827323ACD008C680F /* Assets.xcassets */,
@@ -713,7 +725,9 @@
 				826BB6AA2733DC590058C0CA /* CharacterListCell.swift in Sources */,
 				82AF50BF274A22BE00F484E7 /* Dimension.swift in Sources */,
 				8253707C2737E023009C644F /* MembersViewCell.swift in Sources */,
+				8287400E279C1D3600024290 /* UIViewController + Extension.swift in Sources */,
 				82EAFD4A2734DC4600534108 /* ChatViewCell.swift in Sources */,
+				82874012279C22A200024290 /* DialogueViewModel.swift in Sources */,
 				825E69A527493CA90054294C /* UIFont + Extension.swift in Sources */,
 				8290C853275E639100A2B728 /* UIButton + Extension.swift in Sources */,
 				8290C857275E815F00A2B728 /* CAShapeLayer + Extension.swift in Sources */,
@@ -724,7 +738,8 @@
 				8290C855275E650B00A2B728 /* UILabel + Extension.swift in Sources */,
 				825155102732CB9C00FF27E9 /* Constants.swift in Sources */,
 				82F82C5F274A650B0048B978 /* ChatViewController + AudioPlayer.swift in Sources */,
-				826019532733E56C0060B752 /* DialogueViewModel.swift in Sources */,
+				826019532733E56C0060B752 /* CharacterViewModel.swift in Sources */,
+				8287400C279BCC7400024290 /* CharacterService.swift in Sources */,
 				8251550C273256B400FF27E9 /* UIView + Extension.swift in Sources */,
 				825370782737D8BF009C644F /* TopViewModel.swift in Sources */,
 				825370702736D613009C644F /* ChatService.swift in Sources */,
@@ -755,6 +770,7 @@
 				82A8610927424CF40068689B /* CreateChatController + Audio.swift in Sources */,
 				825370802738B3DD009C644F /* TopCellContents.swift in Sources */,
 				82F82C61274B31490048B978 /* CreateChatController + Canvas.swift in Sources */,
+				82874010279C225700024290 /* Character.swift in Sources */,
 				825370822738EC4E009C644F /* ChatViewModel.swift in Sources */,
 				826BB68F2732D37A0058C0CA /* DialogueService.swift in Sources */,
 			);

@@ -2,18 +2,14 @@ import UIKit
 
 protocol CharacterListViewDelegate {
     func showRegisterViewController()
-    func fetchCharacter()
-    func selectCharacter(dialogues: [Dialogue])
+    func selectCharacter(character: Character)
 }
 
 class CharacterListView: UIView {
     
     // MARK: - Properties
     
-    public var delegate: CharacterListViewDelegate? {
-        didSet { delegate?.fetchCharacter() }
-    }
-    
+    public var delegate: CharacterListViewDelegate?
     private let identifier = "identifier"
     
     public lazy var collectionView: UICollectionView = {
@@ -31,12 +27,10 @@ class CharacterListView: UIView {
         return cv
     }()
     
-    private let firstDialogue = Dialogue(dictionary: ["":""])
-    public lazy var dialogues: [Dialogue] = [firstDialogue] {
+    public let addButton = Character(dictionary: ["":""])
+    public lazy var characters: [Character] = [addButton] {
         didSet { collectionView.reloadData() }
     }
-    
-    private var selectedDialogues: [Dialogue] = []
     
     // MARK: - LifeCycle
     
@@ -67,12 +61,12 @@ class CharacterListView: UIView {
 
 extension CharacterListView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dialogues.count
+        return characters.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as! CharacterListCell
-        cell.viewModal = DialogueViewModel(dialogue: dialogues[indexPath.row], cellNumber: indexPath.row)
+        cell.viewModal = CharacterViewModel(character: characters[indexPath.row], cellNumber: indexPath.row)
         return cell
     }
 }
@@ -87,15 +81,9 @@ extension CharacterListView: UICollectionViewDelegate {
             delegate?.showRegisterViewController()
             
         } else {
-            selectedDialogues = []
             guard let cell = collectionView.cellForItem(at: indexPath) as? CharacterListCell else { return }
-            
-            dialogues.forEach { dialogue in
-                if dialogue.character == cell.viewModal?.character {
-                    selectedDialogues.append(dialogue)
-                }
-            }
-            delegate?.selectCharacter(dialogues: selectedDialogues)
+            guard let character = cell.viewModal?.character else { return }
+            delegate?.selectCharacter(character: character)
         }
     }
 }

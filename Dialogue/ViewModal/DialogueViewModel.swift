@@ -4,7 +4,7 @@ struct DialogueViewModel {
     let dialogue: Dialogue
     let cellNumber: Int
     
-    var character: String {
+    var name: String {
         return dialogue.character
     }
     

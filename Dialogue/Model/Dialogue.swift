@@ -1,16 +1,22 @@
 import UIKit
+import Firebase
 
 struct Dialogue {
-    
-    let character: String
     let dialogue: String
-    let imageUrl: String
     let audioUrl: String
+    let timeStamp: Timestamp
+    let dialogueID: String
+    let character: String
+    let imageUrl: String
+    let characterID: String
     
     init(dictionary: [String: Any]) {
-        self.character = dictionary["character"] as? String ?? ""
         self.dialogue = dictionary["dialogue"] as? String ?? ""
-        self.imageUrl = dictionary["imageUrl"] as? String ?? ""
         self.audioUrl = dictionary["audioUrl"] as? String ?? ""
+        self.timeStamp = dictionary["timeStamp"] as? Timestamp ?? Timestamp()
+        self.dialogueID = dictionary["dialogueID"] as? String ?? ""
+        self.character = dictionary["character"] as? String ?? ""
+        self.imageUrl = dictionary["imageUrl"] as? String ?? ""
+        self.characterID = dictionary["characterID"] as? String ?? ""
     }
 }

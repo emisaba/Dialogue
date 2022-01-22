@@ -11,6 +11,7 @@ target 'Dialogue' do
   pod 'Firebase/Storage'
   pod 'SDWebImage'
   pod 'Hero'
+  pod 'JGProgressHUD'
 
   target 'DialogueTests' do
     inherit! :search_paths

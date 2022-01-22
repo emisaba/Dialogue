@@ -50,7 +50,7 @@ class CreateChatController: UIViewController {
         return tf
     }()
     
-    private let addDialogueButton: UIButton = {
+    public let addDialogueButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .clear
         button.setImage(#imageLiteral(resourceName: "add-comment"), for: .normal)
@@ -74,16 +74,9 @@ class CreateChatController: UIViewController {
         return button
     }()
     
-    private let dialogueListDescription = UILabel.createLabel(size: 20, color: .yellow, text: "セリフが表示されます")
+    public let dialogueListDescription = UILabel.createLabel(size: 20, color: .yellow, text: "セリフが表示されます")
     private let bottomChatDescription = UILabel.createLabel(size: 20, color: .green, text: "会話が表示されます")
     private let registerDescription = UILabel.createLabel(size: 20, color: .blue, text: "タイトル入力欄が表示されます")
-    
-    public var dialoguesBySelectedCharacter: [Dialogue] = [] {
-        didSet {
-            dialogueListDescription.isHidden = true
-            addDialogueButton.isHidden = false
-        }
-    }
     
     public lazy var conversationBottomView: BottomChatView = {
         let view = BottomChatView()
@@ -91,18 +84,25 @@ class CreateChatController: UIViewController {
         return view
     }()
     
-    
-    public var selectedCharacter: Dialogue?
+    public var selectedCharacter: Character?
     
     public var audioPlayer: AVAudioPlayer?
     public var selectedAudios: [URL] = []
-    public var selectedAudiosUrlString: [String] = []
     public var playNum = 0
+    
+    public var characters: [Character] = []
+    public var dialogues: [Dialogue] = []
+    public var selectedDialogues: [Dialogue] = []
+    
+    private var keyboardFrameHeight: CGFloat = 0
     
     // MARK: - LifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        fetchCharacters()
+        fetchDialogues()
         configureUI()
         detectKeyboard()
     }
@@ -114,25 +114,41 @@ class CreateChatController: UIViewController {
     
     // MARK: - API
     
-    func fetchDialogue() {
+    func fetchCharacters() {
+        CharacterService.fetchCharacter { characters in
+            self.characters = characters
+            characters.forEach { self.characterListView.characters.append($0) }
+            self.characterListView.collectionView.reloadData()
+        }
+    }
+    
+    func fetchDialogues() {
         DialogueService.fetchDialogue { dialogues in
-            dialogues.forEach { self.characterListView.dialogues.append($0) }
+            self.dialogues = dialogues
         }
     }
     
     func uploadConversation(title: String, members: [String], dialogues: [String]) {
         
-        let conversationInfo = ConversationInfo(conversations: selectedAudiosUrlString,
-                                                members: members,
-                                                dialogues: dialogues,
-                                                title: title)
+        UIView.animate(withDuration: 0.25) {
+            self.view.frame.origin.y += self.keyboardFrameHeight
+            self.view.endEditing(true)
+            
+        } completion: { _ in
+            
+            let conversationInfo = ConversationInfo(conversations: self.selectedAudiosUrlStrings(),
+                                                    members: members,
+                                                    dialogues: dialogues,
+                                                    title: title)
 
-        ChatService.uploadConversation(info: conversationInfo) { error in
-            if let error = error {
-                print("error: \(error.localizedDescription)")
-                return
+            ChatService.uploadConversation(info: conversationInfo) { error in
+                if let error = error {
+                    print("error: \(error.localizedDescription)")
+                    return
+                }
+                
+                self.dismiss(animated: true, completion: nil)
             }
-            self.navigationController?.popViewController(animated: true)
         }
     }
     
@@ -143,17 +159,24 @@ class CreateChatController: UIViewController {
     }
     
     @objc func didTapAddDialogueButton() {
-        guard let imageUrl = URL(string: selectedCharacter?.imageUrl ?? "") else { return }
-        guard let name = selectedCharacter?.character else { return }
-        let characterInfo = CharacterInfo(imageUrl: imageUrl, name: name)
+        guard let selectedCharacter = selectedCharacter else { return }
+        guard let imageUrl = URL(string: selectedCharacter.imageUrl) else { return }
+        let id = selectedCharacter.characterID
+        let name = selectedCharacter.character
+        let characterInfo = CharacterInfo(id: id, imageUrl: imageUrl, name: name)
         
         let vc = RegisterDialogueController(characterInfo: characterInfo)
+        vc.completion = { dialogues in
+            self.dialogues = dialogues
+            self.updateDialogues(character: selectedCharacter)
+        }
         navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc func showKeyboard(notification: NSNotification) {
         if let userInfo = notification.userInfo {
             guard let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+            self.keyboardFrameHeight = keyboardFrame.cgRectValue.height
             
             UIView.animate(withDuration: 0.25) {
                 self.view.frame.origin.y -= keyboardFrame.cgRectValue.height
@@ -164,8 +187,8 @@ class CreateChatController: UIViewController {
     @objc func didTapRegisterButton() {
         
         guard let title = titleTextField.text else { return }
-        let members = conversationBottomView.convarsations.map { $0.imageUrl }
-        let dialogues = conversationBottomView.convarsations.map { $0.dialogue }
+        let members = conversationBottomView.dialogues.map { $0.imageUrl }
+        let dialogues = conversationBottomView.dialogues.map { $0.dialogue }
         
         uploadConversation(title: title, members: members, dialogues: dialogues)
     }
@@ -257,6 +280,33 @@ class CreateChatController: UIViewController {
                                                name: UIResponder.keyboardWillShowNotification,
                                                object: nil)
     }
+    
+    func selectedAudiosUrlStrings() -> [String] {
+        let selectedAudiosUrlStrings = conversationBottomView.dialogues.map { $0.audioUrl }
+        return selectedAudiosUrlStrings
+    }
+    
+    func updateCharacter(newInfo: NewInfo) {
+        self.characterListView.characters = []
+        self.characterListView.characters.append(self.characterListView.addButton)
+        newInfo.characters.forEach { self.characterListView.characters.append($0) }
+        self.characterListView.collectionView.reloadData()
+        
+        self.characters = newInfo.characters
+        self.dialogues = newInfo.dialogues
+    }
+    
+    func updateDialogues(character: Character) {
+        selectedDialogues = []
+        
+        dialogues.forEach {
+            if $0.characterID == character.characterID {
+                selectedDialogues.append($0)
+            }
+        }
+        
+        dialogueListView.reloadData()
+    }
 }
 
 // MARK: - UITableViewDataSource
@@ -264,13 +314,13 @@ class CreateChatController: UIViewController {
 extension CreateChatController: UITableViewDataSource  {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dialoguesBySelectedCharacter.count
+        return selectedDialogues.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! CreateChatCell
         cell.backgroundColor = .clear
-        cell.label.text = dialoguesBySelectedCharacter[indexPath.row].dialogue
+        cell.label.text = selectedDialogues[indexPath.row].dialogue
         return cell
     }
 }
@@ -279,7 +329,7 @@ extension CreateChatController: UITableViewDataSource  {
 
 extension CreateChatController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        conversationBottomView.convarsations.append(dialoguesBySelectedCharacter[indexPath.row])
+        conversationBottomView.dialogues.append(selectedDialogues[indexPath.row])
         
         bottomChatDescription.isHidden = true
         startButton.isHidden = false

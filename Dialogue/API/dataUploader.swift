@@ -1,7 +1,15 @@
 import FirebaseStorage
 
-struct DialogueItem {
+struct CharacterItem {
     let image: UIImage
+    let audio: URL
+    let text: String
+    let name: String
+}
+
+struct DialogueItem {
+    let id: String
+    let imageUrl: String
     let audio: URL
     let text: String
     let character: String
@@ -14,7 +22,7 @@ struct DownloadURL {
 
 struct DataUploader {
     
-    static func uploadDialogue(dialogueItem: DialogueItem, completion: @escaping((DownloadURL) -> Void)) {
+    static func FistUploadDialogue(dialogueItem: CharacterItem, completion: @escaping((DownloadURL) -> Void)) {
         
         guard let image = dialogueItem.image.jpegData(compressionQuality: 0.75) else { return }
         let audio = dialogueItem.audio
@@ -34,6 +42,19 @@ struct DataUploader {
                         completion(DownloadURL(image: imageUrl, audio: audioUrl))
                     }
                 }
+            }
+        }
+    }
+    
+    static func uploadDialogue(audio: URL, completion: @escaping(String) -> Void) {
+        let filename = UUID().uuidString
+        let audioRef = Storage.storage().reference(withPath: "audio/\(filename)")
+        
+        audioRef.putFile(from: audio, metadata: nil) { _, _ in
+            audioRef.downloadURL { url, _ in
+                guard let audioUrl = url?.absoluteString else { return }
+                
+                completion(audioUrl)
             }
         }
     }

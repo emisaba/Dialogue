@@ -5,17 +5,15 @@ class CharacterListCell: UICollectionViewCell {
     
     // MARK: - Properties
     
-    public var viewModal: DialogueViewModel? {
-        didSet {
-            configureUI()
-        }
+    public var viewModal: CharacterViewModel? {
+        didSet { configureUI() }
     }
     
     private lazy var imageView: UIImageView = {
         let iv = UIImageView()
         iv.clipsToBounds = true
         iv.layer.cornerRadius = 30
-        iv.contentMode = .scaleAspectFit
+        iv.contentMode = .scaleAspectFill
         return iv
     }()
     
@@ -57,12 +55,12 @@ class CharacterListCell: UICollectionViewCell {
         guard let viewModal = viewModal else { return }
         
         if viewModal.cellNumber == 0 {
-            imageView.image = #imageLiteral(resourceName: "user5-1")
+            imageView.image = #imageLiteral(resourceName: "user")
             imageView.clipsToBounds = false
             nameLabel.text = "追加"
         } else {
             imageView.sd_setImage(with: viewModal.imageUrl, completed: nil)
-            nameLabel.text = viewModal.character
+            nameLabel.text = viewModal.name
         }
     }
 }

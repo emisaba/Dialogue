@@ -7,14 +7,12 @@ extension CreateChatController: AVAudioPlayerDelegate {
     
     @objc func didTapStartButton() {
         selectedAudios = []
-        selectedAudiosUrlString = []
         
-        conversationBottomView.convarsations.forEach { dialogue in
-            selectedAudiosUrlString.append(dialogue.audioUrl)
-            
+        conversationBottomView.dialogues.forEach { dialogue in
             guard let url = URL(string: dialogue.audioUrl) else { return }
             selectedAudios.append(url)
         }
+        
         startPlay()
     }
     

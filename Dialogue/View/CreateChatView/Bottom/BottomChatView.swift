@@ -27,13 +27,13 @@ class BottomChatView: UIView {
         return cv
     }()
     
-    public var convarsations: [Dialogue] = [] {
+    public var dialogues: [Dialogue] = [] {
         didSet {
             collectionView.reloadData()
-            collectionView.scrollToItem(at: IndexPath(item: convarsations.count - 1, section: 0),
+            collectionView.scrollToItem(at: IndexPath(item: dialogues.count - 1, section: 0),
                                         at: .centeredHorizontally, animated: true)
             
-            if convarsations.count >= 2 { delegate?.moreThanTwoConversations() }
+            if dialogues.count >= 2 { delegate?.moreThanTwoConversations() }
         }
     }
     
@@ -61,12 +61,12 @@ class BottomChatView: UIView {
 
 extension BottomChatView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return convarsations.count
+        return dialogues.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as! BottomChatCell
-        cell.viewModal = DialogueViewModel(dialogue: convarsations[indexPath.row], cellNumber: indexPath.row)
+        cell.viewModal = DialogueViewModel(dialogue: dialogues[indexPath.row], cellNumber: indexPath.row)
         return cell
     }
 }

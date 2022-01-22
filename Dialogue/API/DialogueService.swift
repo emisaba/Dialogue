@@ -1,27 +1,34 @@
 import UIKit
+import Firebase
 
 struct DialogueService {
     
-    static func uploadDialogue(dialogue: DialogueItem, completion: @escaping((Error?) -> Void)) {
+    static func uploadDialogue(dialogue: DialogueItem, completion: @escaping([Dialogue]) -> Void) {
         
-        DataUploader.uploadDialogue(dialogueItem: dialogue) { downloadURLs in
-            let character = dialogue.character
-            let dialogue = dialogue.text
-            let imageUrl = downloadURLs.image
-            let audioUrl = downloadURLs.audio
+        let ref = COLLECTION_DIALOGUES.document()
+        let dialogueID = ref.documentID
+        
+        DataUploader.uploadDialogue(audio: dialogue.audio) { audioURL in
             
-            let data: [String: Any] = ["character": character,
-                                       "dialogue": dialogue,
-                                       "imageUrl": imageUrl,
-                                       "audioUrl": audioUrl]
+            let data: [String: Any] = ["characterID": dialogue.id,
+                                       "dialogueID": dialogueID,
+                                       "dialogue": dialogue.text,
+                                       "audioUrl": audioURL,
+                                       "character": dialogue.character,
+                                       "imageUrl": dialogue.imageUrl,
+                                       "timeStamp": Timestamp()]
             
-            COLLECTION_DIALOGUES.document(character).setData(data, completion: completion)
+            ref.setData(data) { _ in
+                fetchDialogue { dialogues in
+                    completion(dialogues)
+                }
+            }
         }
     }
     
-    static func fetchDialogue(completion: @escaping(([Dialogue]) -> Void)) {
+    static func fetchDialogue(completion: @escaping([Dialogue]) -> Void) {
         
-        COLLECTION_DIALOGUES.getDocuments { snapshot, _ in
+        COLLECTION_DIALOGUES.order(by: "timeStamp", descending: true).getDocuments { snapshot, _ in
             guard let documents = snapshot?.documents else { return }
             let dialogues = documents.map { Dialogue(dictionary: $0.data()) }
             completion(dialogues)
