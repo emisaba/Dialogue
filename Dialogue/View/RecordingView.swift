@@ -57,6 +57,7 @@ class RecordingView: UIView, AVAudioRecorderDelegate, SFSpeechRecognizerDelegate
         tv.textColor = .white
         tv.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         tv.tintColor = .lightGray
+        tv.delegate = self
         return tv
     }()
     
@@ -277,5 +278,14 @@ class RecordingView: UIView, AVAudioRecorderDelegate, SFSpeechRecognizerDelegate
                 }
             }
         }
+    }
+}
+
+// MARK: - UITextViewDelegate
+
+extension RecordingView: UITextViewDelegate {
+    func textViewDidChange(_ textView: UITextView) {
+        guard let text = textView.text else { return }
+        delegate?.audioInfo(audioInfo: AudioInfo(text: text, audio: getDirectory(filename: "test")))
     }
 }

@@ -217,6 +217,7 @@ extension RegisterViewController: RecordingViewDelegate {
     func audioInfo(audioInfo: AudioInfo) {
         audioText = audioInfo.text
         audioUrl = audioInfo.audio
+        print("###audioText: \(audioText)")
     }
 }
 

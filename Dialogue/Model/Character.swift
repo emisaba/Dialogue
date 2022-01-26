@@ -1,4 +1,5 @@
 import UIKit
+import Firebase
 
 struct Character {
     let character: String
